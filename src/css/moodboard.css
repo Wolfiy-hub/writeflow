@@ -1,0 +1,992 @@
+/* ============================================
+   MOODBOARD.CSS - Visual moodboard styles
+   ============================================ */
+
+/* ==================== MOODBOARD VIEW ==================== */
+
+#view-moodboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+.moodboard-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 40px;
+}
+
+.moodboard-empty-icon {
+  color: var(--text-muted);
+  opacity: 0.4;
+  margin-bottom: 20px;
+}
+
+.moodboard-empty h2 {
+  font-size: 22px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.moodboard-empty p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* ==================== MOODBOARD TOOLBAR ==================== */
+
+.moodboard-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.moodboard-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+  min-width: 120px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  cursor: text;
+  transition: var(--transition);
+  outline: none;
+  border: 1px solid transparent;
+}
+
+.moodboard-title:hover {
+  background: var(--bg-hover);
+}
+
+.moodboard-title:focus {
+  background: var(--bg-card);
+  border-color: var(--accent-primary);
+}
+
+.moodboard-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 8px;
+  border-right: 1px solid var(--border-color);
+}
+
+.moodboard-toolbar-group:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.moodboard-toolbar-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-family: var(--font-ui);
+  transition: var(--transition);
+}
+
+.moodboard-toolbar-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.moodboard-toolbar-btn.active {
+  background: rgba(124, 106, 247, 0.15);
+  color: var(--accent-primary);
+}
+
+.moodboard-toolbar-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.moodboard-zoom-display {
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 40px;
+  text-align: center;
+  font-family: var(--font-ui);
+}
+
+/* ==================== MOODBOARD CANVAS ==================== */
+
+.moodboard-canvas-container {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(circle, var(--border-color) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-color: var(--bg-primary);
+  cursor: grab;
+}
+
+.moodboard-canvas-container.panning {
+  cursor: grabbing;
+}
+
+.moodboard-canvas-container.grid-snap {
+  background-size: 20px 20px;
+}
+
+.moodboard-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3000px;
+  height: 3000px;
+  transform-origin: 0 0;
+  transition: transform 0.15s ease-out;
+}
+
+.moodboard-canvas.dragging-item {
+  cursor: grabbing;
+}
+
+/* ==================== MOODBOARD ITEMS ==================== */
+
+.moodboard-item {
+  position: absolute;
+  border-radius: var(--radius-md);
+  cursor: move;
+  transition: box-shadow 0.15s ease;
+  border: 3px solid transparent;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  user-select: none;
+  overflow: visible;
+  padding: 0;
+  background: transparent;
+}
+
+.moodboard-item:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 6px 20px rgba(124, 106, 247, 0.3);
+  z-index: 10;
+}
+
+.moodboard-item.selected {
+  border-color: var(--accent-primary);
+  box-shadow: 0 6px 20px rgba(124, 106, 247, 0.4);
+  z-index: 100;
+}
+
+.moodboard-item.dragging {
+  opacity: 0.8;
+  cursor: grabbing;
+  z-index: 200;
+}
+
+/* Inner wrapper - this is what gets clipped, so the toolbar can escape */
+.moodboard-item-visual {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: block;
+  position: relative;
+}
+
+/* Image item */
+.moodboard-item.type-image .moodboard-item-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+/* Text item */
+.moodboard-item.type-text .moodboard-item-visual {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: var(--font-writing);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.moodboard-item.type-text .moodboard-item-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  text-align: center;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  cursor: move;
+}
+
+.moodboard-item.type-text .moodboard-item-content[contenteditable="true"] {
+  cursor: text;
+  outline: 2px solid var(--accent-primary);
+  outline-offset: -2px;
+  background: rgba(124, 106, 247, 0.05);
+}
+
+/* Color swatch item */
+.moodboard-item.type-color .moodboard-item-visual {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  color: white;
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  font-weight: 600;
+}
+
+/* Item toolbar (appears when selected) */
+.moodboard-item-toolbar {
+  position: absolute;
+  top: -36px;
+  right: 0;
+  display: none;
+  gap: 4px;
+  background: var(--bg-modal);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  box-shadow: var(--shadow-md);
+  z-index: 1000;
+}
+
+.moodboard-item.selected .moodboard-item-toolbar {
+  display: flex;
+}
+
+.item-tool-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.item-tool-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.item-tool-btn.danger:hover {
+  background: rgba(224, 85, 85, 0.15);
+  color: var(--accent-danger);
+}
+
+/* Resize handles */
+.moodboard-item-resize {
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  width: 14px;
+  height: 14px;
+  background: var(--accent-primary);
+  border: 2px solid var(--bg-primary);
+  border-radius: 50%;
+  cursor: nwse-resize;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 1001;
+}
+
+.moodboard-item.selected .moodboard-item-resize {
+  opacity: 1;
+}
+
+/* ==================== ADD ITEM PANEL ==================== */
+
+.moodboard-add-panel {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-modal);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 6px;
+  display: flex;
+  gap: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.moodboard-add-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.moodboard-add-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.moodboard-add-btn.primary {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.moodboard-add-btn.primary:hover {
+  background: var(--accent-hover);
+}
+
+.moodboard-add-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ==================== SIDEBAR MOODBOARDS LIST ==================== */
+
+.moodboard-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: 2px;
+}
+
+.moodboard-sidebar-item:hover {
+  background: var(--bg-hover);
+}
+
+.moodboard-sidebar-item.active {
+  background: rgba(124, 106, 247, 0.12);
+  border-left: 3px solid var(--accent-primary);
+  padding-left: 7px;
+}
+
+.moodboard-sidebar-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.moodboard-sidebar-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.moodboard-sidebar-name {
+  font-size: 13px;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.moodboard-sidebar-count {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* ==================== COLOR PICKER MODAL ==================== */
+
+.color-input-panel {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+}
+
+.color-input-panel input[type="color"] {
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: transparent;
+}
+
+.color-input-panel input[type="text"] {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  outline: none;
+}
+
+/* ==================== TO-DO LIST ITEM (FIXED — auto-wrap text) ==================== */
+
+.moodboard-item.type-todo .moodboard-item-visual {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  padding: 12px 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.todo-list-title {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 2px 4px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 6px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  outline: none;
+  width: 100%;
+}
+
+.todo-list-title:focus {
+  color: var(--accent-primary);
+}
+
+.todo-items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
+}
+
+.todo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 3px 2px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-primary);
+  border-radius: 3px;
+  transition: background 0.15s ease;
+}
+
+.todo-item:hover {
+  background: var(--bg-hover);
+}
+
+.todo-item-checkbox {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+/* Changed from input to textarea for multi-line wrapping */
+.todo-item-text {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 2px 0;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  resize: none;
+  overflow: hidden;
+  min-height: 18px;
+}
+
+.todo-item.checked .todo-item-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.todo-item-remove {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0 4px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  font-size: 14px;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.todo-item:hover .todo-item-remove {
+  opacity: 0.6;
+}
+
+.todo-item-remove:hover {
+  opacity: 1 !important;
+  color: var(--accent-danger);
+}
+
+.todo-add-btn {
+  background: transparent;
+  border: 1px dashed var(--border-color);
+  color: var(--text-muted);
+  padding: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  transition: var(--transition);
+  margin-top: 4px;
+}
+
+.todo-add-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.todo-progress {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border-color);
+  font-size: 10px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.todo-progress-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--bg-tertiary);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.todo-progress-fill {
+  height: 100%;
+  background: var(--accent-primary);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* ==================== LINK CARD ITEM (FIXED) ==================== */
+
+.moodboard-item.type-link .moodboard-item-visual {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.link-card-image {
+  width: 100%;
+  height: 90px;
+  background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-primary);
+  opacity: 0.6;
+}
+
+.link-card-content {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.link-card-domain {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.link-card-domain svg {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+}
+
+.link-card-title {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+}
+
+.link-card-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+}
+
+.link-card-open-btn {
+  background: rgba(124, 106, 247, 0.15);
+  border: 1px solid rgba(124, 106, 247, 0.4);
+  color: var(--accent-primary);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: auto;
+  align-self: flex-start;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: var(--transition);
+}
+
+.link-card-open-btn:hover {
+  background: rgba(124, 106, 247, 0.25);
+  border-color: rgba(124, 106, 247, 0.6);
+}
+
+.link-card-open-btn svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* ==================== TABLE ITEM ==================== */
+
+.moodboard-item.type-table .moodboard-item-visual {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  padding: 8px;
+  overflow: auto;
+}
+
+.moodboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-ui);
+  font-size: 11px;
+}
+
+.moodboard-table th,
+.moodboard-table td {
+  border: 1px solid var(--border-color);
+  padding: 4px 8px;
+  text-align: left;
+  min-width: 40px;
+  position: relative;
+}
+
+.moodboard-table th {
+  background: var(--bg-tertiary);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.moodboard-table td[contenteditable="true"],
+.moodboard-table th[contenteditable="true"] {
+  outline: none;
+}
+
+.moodboard-table td:focus,
+.moodboard-table th:focus {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: -2px;
+}
+
+.table-controls {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  justify-content: center;
+}
+
+.table-control-btn {
+  background: transparent;
+  border: 1px dashed var(--border-color);
+  color: var(--text-muted);
+  padding: 2px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  transition: var(--transition);
+}
+
+.table-control-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* ==================== CONNECTIONS (LINES) ==================== */
+
+.moodboard-connections-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 5;
+}
+
+.moodboard-connection-line {
+  stroke: #7c6af7;
+  stroke-width: 2;
+  fill: none;
+  cursor: pointer;
+  pointer-events: stroke;
+  transition: stroke-width 0.15s ease, opacity 0.15s ease;
+  opacity: 0.8;
+}
+
+.moodboard-connection-line:hover {
+  stroke-width: 4;
+  opacity: 1;
+}
+
+.moodboard-connection-line.selected {
+  stroke-width: 4;
+  opacity: 1;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+.moodboard-connection-arrow {
+  fill: #7c6af7;
+  pointer-events: none;
+}
+
+/* Connect mode indicator */
+.moodboard-canvas-container.connecting {
+  cursor: crosshair;
+}
+
+.moodboard-connecting-banner {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent-primary);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(124, 106, 247, 0.4);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  gap: 10px;
+}
+
+.moodboard-canvas-container.connecting .moodboard-connecting-banner {
+  display: flex;
+}
+
+.moodboard-connecting-cancel {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-ui);
+}
+
+.moodboard-connecting-cancel:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.moodboard-item.connecting-source .moodboard-item-visual {
+  outline: 3px dashed var(--accent-primary);
+  outline-offset: 3px;
+  animation: connect-pulse 1s ease infinite;
+}
+
+@keyframes connect-pulse {
+
+  0%,
+  100% {
+    outline-color: var(--accent-primary);
+  }
+
+  50% {
+    outline-color: var(--accent-hover);
+  }
+}
+
+.moodboard-item.connect-target-hover .moodboard-item-visual {
+  outline: 3px solid var(--accent-success);
+  outline-offset: 3px;
+}
+
+/* Connect button on items */
+.moodboard-item-connect-btn {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  color: white;
+  border: 2px solid var(--bg-primary);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1002;
+}
+
+.moodboard-item.selected .moodboard-item-connect-btn {
+  display: flex;
+}
+
+.moodboard-item-connect-btn:hover {
+  background: var(--accent-hover);
+  transform: scale(1.15);
+}
+
+.moodboard-item-connect-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ==================== LINK MODAL ==================== */
+
+.link-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.link-input {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 10px 14px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.link-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.link-preview {
+  padding: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  display: none;
+  gap: 12px;
+  align-items: center;
+}
+
+.link-preview.visible {
+  display: flex;
+}
+
+.link-preview-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.link-preview-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.link-preview-domain {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.link-preview-url {
+  font-size: 12px;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

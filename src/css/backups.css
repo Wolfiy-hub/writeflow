@@ -1,0 +1,145 @@
+/* ============================================
+   BACKUPS.CSS - Backup UI styles
+   ============================================ */
+
+/* Backup Modal */
+.backup-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 8px;
+}
+
+.backup-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.backup-item:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.backup-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.backup-date {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.backup-size {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.backup-restore-btn {
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-ui);
+}
+
+.backup-restore-btn:hover {
+  background: var(--accent-hover);
+}
+
+.no-backups {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.no-backups-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+
+/* Unsaved Changes Modal */
+.unsaved-warning {
+  padding: 12px 14px;
+  background: rgba(240, 160, 48, 0.1);
+  border-left: 3px solid var(--accent-warning);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* Storage info in modal */
+.storage-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.storage-stat {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  text-align: center;
+}
+
+.storage-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  margin-bottom: 4px;
+}
+
+.storage-stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.storage-path {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.storage-path:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* Enhanced save status indicator */
+.editor-save-status.saved-recently {
+  animation: save-flash 1s ease;
+}
+
+@keyframes save-flash {
+  0% { color: var(--accent-primary); }
+  100% { color: var(--accent-success); }
+}

@@ -1,0 +1,537 @@
+/* ============================================
+   EDITOR.CSS - Chapter Editor styles
+   ============================================ */
+
+/* ==================== EDITOR CONTAINER ==================== */
+
+#view-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-primary);
+  overflow: visible;
+}
+
+.editor-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 40px;
+}
+
+.editor-empty-icon {
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  opacity: 0.4;
+}
+
+.editor-empty h2 {
+  font-size: 22px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.editor-empty p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* ==================== EDITOR TOOLBAR ==================== */
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  overflow: visible;
+  position: relative;
+  z-index: 50;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-right: 8px;
+  margin-right: 4px;
+  border-right: 1px solid var(--border-color);
+}
+
+.toolbar-group:last-child {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+.toolbar-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.toolbar-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.toolbar-btn.active {
+  background: rgba(124, 106, 247, 0.15);
+  color: var(--accent-primary);
+}
+
+.toolbar-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.toolbar-btn-wide {
+  width: auto;
+  padding: 0 10px;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ==================== DROPDOWNS (FIXED!) ==================== */
+
+.toolbar-dropdown {
+  position: relative;
+}
+
+.toolbar-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: var(--bg-modal);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  min-width: 180px;
+  z-index: 9999;
+  padding: 4px 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+  max-height: none;
+  overflow: visible;
+}
+
+.toolbar-dropdown-menu.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.toolbar-dropdown-item {
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.1s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-ui);
+  white-space: nowrap;
+}
+
+.toolbar-dropdown-item:hover {
+  background: var(--bg-hover);
+}
+
+.toolbar-dropdown-preview {
+  color: var(--text-secondary);
+  font-size: 14px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.scene-break-preview {
+  text-align: center;
+  color: var(--text-secondary);
+  letter-spacing: 3px;
+  min-width: 60px;
+  font-size: 14px;
+}
+
+/* ==================== EDITOR AREA ==================== */
+
+.editor-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 40px 20px 100px;
+  position: relative;
+  z-index: 1;
+}
+
+.editor-wrapper {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* ==================== CHAPTER TITLE ==================== */
+
+.chapter-title-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-writing);
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.3;
+  padding: 8px 0;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.chapter-title-input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ==================== CHAPTER SUMMARY ==================== */
+
+.chapter-summary-section {
+  margin-bottom: 32px;
+}
+
+.chapter-summary-toggle {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  padding: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease;
+}
+
+.chapter-summary-toggle:hover {
+  color: var(--text-primary);
+}
+
+.chapter-summary-toggle svg {
+  transition: transform 0.2s ease;
+}
+
+.chapter-summary-toggle.open svg {
+  transform: rotate(90deg);
+}
+
+.chapter-summary-content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+
+.chapter-summary-content.open {
+  max-height: 500px;
+}
+
+.chapter-summary-textarea {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  padding: 12px 14px;
+  outline: none;
+  resize: vertical;
+  min-height: 80px;
+  margin-top: 8px;
+  line-height: 1.5;
+  transition: var(--transition);
+}
+
+.chapter-summary-textarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(124, 106, 247, 0.15);
+}
+
+.chapter-summary-textarea::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ==================== EDITOR CONTENT ==================== */
+
+.editor-content {
+  min-height: 500px;
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-writing);
+  font-size: 18px;
+  line-height: 1.8;
+  padding: 0;
+}
+
+.editor-content:empty::before {
+  content: attr(data-placeholder);
+  color: var(--text-muted);
+  font-style: italic;
+  pointer-events: none;
+}
+
+.editor-content p {
+  margin-bottom: 1.2em;
+  text-indent: 0;
+}
+
+.editor-content p:first-child {
+  margin-top: 0;
+}
+
+.editor-content h1 {
+  font-size: 2em;
+  font-weight: 700;
+  margin: 1em 0 0.5em;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.editor-content h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 1em 0 0.5em;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.editor-content h3 {
+  font-size: 1.2em;
+  font-weight: 600;
+  margin: 1em 0 0.5em;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.editor-content strong,
+.editor-content b {
+  font-weight: 700;
+}
+
+.editor-content em,
+.editor-content i {
+  font-style: italic;
+}
+
+.editor-content u {
+  text-decoration: underline;
+}
+
+.editor-content s,
+.editor-content strike {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+}
+
+.editor-content blockquote {
+  border-left: 3px solid var(--accent-primary);
+  padding-left: 20px;
+  margin: 1.2em 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.editor-content ul,
+.editor-content ol {
+  margin: 1em 0 1em 24px;
+  padding-left: 0;
+}
+
+.editor-content ul li,
+.editor-content ol li {
+  margin-bottom: 0.4em;
+  padding-left: 8px;
+}
+
+.editor-content ul {
+  list-style-type: disc;
+}
+
+.editor-content ol {
+  list-style-type: decimal;
+}
+
+/* Scene breaks */
+.scene-break {
+  display: block;
+  text-align: center;
+  margin: 2.5em auto;
+  color: var(--text-secondary);
+  user-select: none;
+  cursor: default;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 20px;
+  letter-spacing: 8px;
+  line-height: 1;
+}
+
+.scene-break[data-style="asterisks"]::before {
+  content: '* * *';
+}
+
+.scene-break[data-style="dots"]::before {
+  content: '• • •';
+}
+
+.scene-break[data-style="dashes"]::before {
+  content: '— — —';
+}
+
+.scene-break[data-style="ornament"]::before {
+  content: '❦';
+  font-size: 28px;
+  letter-spacing: 0;
+}
+
+.scene-break[data-style="flourish"]::before {
+  content: '❋';
+  font-size: 24px;
+  letter-spacing: 0;
+}
+
+.scene-break[data-style="line"] {
+  height: 1px;
+  background: var(--border-color);
+  max-width: 100px;
+  margin: 3em auto;
+}
+
+.scene-break[data-style="line"]::before {
+  content: '';
+}
+
+.editor-content [style*="text-align: center"],
+.editor-content .text-center {
+  text-align: center;
+}
+
+.editor-content [style*="text-align: right"],
+.editor-content .text-right {
+  text-align: right;
+}
+
+.editor-content [style*="text-align: justify"],
+.editor-content .text-justify {
+  text-align: justify;
+}
+
+.editor-content ::selection {
+  background: rgba(124, 106, 247, 0.3);
+  color: var(--text-primary);
+}
+
+/* ==================== EDITOR FOOTER ==================== */
+
+.editor-footer {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.editor-stats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.editor-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.editor-stat-value {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.editor-save-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.editor-save-status.saved {
+  color: var(--accent-success);
+}
+
+.editor-save-status.saving {
+  color: var(--accent-warning);
+}
+
+.editor-save-status.error {
+  color: var(--accent-danger);
+}
+
+.save-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.save-dot.saving {
+  animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ==================== FONT OPTIONS ==================== */
+
+[data-font="Lora"] { font-family: 'Lora', Georgia, serif; }
+[data-font="Merriweather"] { font-family: 'Merriweather', Georgia, serif; }
+[data-font="EB Garamond"] { font-family: 'EB Garamond', Georgia, serif; }
+[data-font="Crimson Text"] { font-family: 'Crimson Text', Georgia, serif; }
+[data-font="Playfair Display"] { font-family: 'Playfair Display', Georgia, serif; }
+[data-font="Inter"] { font-family: 'Inter', sans-serif; }

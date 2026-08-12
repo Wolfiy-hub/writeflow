@@ -1,0 +1,434 @@
+/* ============================================
+   EXPORT.CSS - Book design & export
+   ============================================ */
+
+/* ==================== EXPORT MODAL ==================== */
+
+.export-modal .modal-box {
+  max-width: 1100px;
+  width: 95vw;
+  max-height: 92vh;
+}
+
+.export-container {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+  height: 65vh;
+}
+
+/* Left panel — settings */
+.export-settings {
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.export-section {
+  margin-bottom: 20px;
+}
+
+.export-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Format selector */
+.export-format-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.export-format-btn {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 12px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+  font-family: var(--font-ui);
+}
+
+.export-format-btn:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.export-format-btn.selected {
+  border-color: var(--accent-primary);
+  background: rgba(124, 106, 247, 0.1);
+  color: var(--accent-primary);
+}
+
+.export-format-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.export-format-name {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.export-format-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.export-format-btn.selected .export-format-desc {
+  color: var(--text-secondary);
+}
+
+/* Setting rows */
+.export-setting {
+  margin-bottom: 12px;
+}
+
+.export-setting-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.export-select,
+.export-input {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.export-select:focus,
+.export-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.export-select {
+  cursor: pointer;
+  appearance: none;
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239090b0' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+/* Slider */
+.export-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.export-slider {
+  flex: 1;
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 999px;
+  outline: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.export-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--bg-primary);
+  box-shadow: 0 0 0 1px var(--border-color);
+}
+
+.export-slider-value {
+  font-size: 12px;
+  color: var(--text-primary);
+  font-weight: 500;
+  min-width: 45px;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+}
+
+/* Checkboxes */
+.export-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.export-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.export-checkbox-label {
+  font-size: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* Chapter selection */
+.export-chapters-list {
+  max-height: 200px;
+  overflow-y: auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px;
+}
+
+.export-chapter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.export-chapter-item:hover {
+  background: var(--bg-hover);
+}
+
+.export-chapter-name {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.export-chapter-words {
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.export-chapters-toolbar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.export-chapters-toolbar button {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: var(--transition);
+}
+
+.export-chapters-toolbar button:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+/* Right panel — preview */
+.export-preview-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.export-preview-header {
+  padding: 10px 14px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.export-preview-stats {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: normal;
+}
+
+.export-preview-content {
+  flex: 1;
+  overflow-y: auto;
+  background: #e8e8e8;
+  padding: 30px 40px;
+}
+
+/* Page preview — mimics a book page */
+.export-preview-page {
+  background: white;
+  color: #1a1a2e;
+  max-width: 500px;
+  min-height: 700px;
+  margin: 0 auto 30px;
+  padding: 60px 50px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-family: 'Georgia', serif;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.export-preview-page h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 24px 0;
+  text-align: center;
+}
+
+.export-preview-page h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 30px 0 16px 0;
+  text-align: center;
+}
+
+.export-preview-page h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 20px 0 10px 0;
+}
+
+.export-preview-page p {
+  margin: 0 0 14px 0;
+  text-indent: 20px;
+  text-align: justify;
+}
+
+.export-preview-page p.first-paragraph {
+  text-indent: 0;
+}
+
+.export-preview-page .title-page {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.export-preview-page .title-page-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.export-preview-page .title-page-author {
+  font-size: 16px;
+  color: #555;
+  font-style: italic;
+  margin-top: 40px;
+}
+
+.export-preview-page .toc-entry {
+  display: flex;
+  padding: 6px 0;
+  text-indent: 0;
+  border-bottom: 1px dotted #ccc;
+}
+
+.export-preview-page .toc-entry-title {
+  flex: 1;
+}
+
+.export-preview-page .toc-entry-page {
+  padding-left: 20px;
+}
+
+.export-preview-page .chapter-heading {
+  text-align: center;
+  margin: 40px 0 30px 0;
+}
+
+.export-preview-page .chapter-number {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.export-preview-page .chapter-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.export-preview-page .scene-break {
+  text-align: center;
+  margin: 24px 0;
+  letter-spacing: 8px;
+  color: #888;
+}
+
+/* Empty state for preview */
+.export-preview-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  height: 100%;
+  text-align: center;
+}
+
+.export-preview-empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+
+/* Font preview */
+.font-preview {
+  padding: 8px 10px;
+  background: var(--bg-card);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  font-style: italic;
+  border: 1px solid var(--border-color);
+}

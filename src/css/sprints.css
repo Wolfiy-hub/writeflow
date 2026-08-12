@@ -1,0 +1,775 @@
+/* ============================================
+   SPRINTS.CSS - Writing Sprints & Break Timer
+   ============================================ */
+
+/* ==================== SPRINT LAUNCHER BUTTON ==================== */
+
+.sprint-launcher {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f0a030, #e08820);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(240, 160, 48, 0.4);
+  transition: var(--transition);
+  z-index: 499;
+}
+
+.sprint-launcher.visible {
+  display: flex;
+}
+
+.sprint-launcher:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(240, 160, 48, 0.6);
+}
+
+.sprint-launcher.active {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  box-shadow: 0 4px 16px rgba(124, 106, 247, 0.4);
+  animation: pulse-active 2s ease infinite;
+}
+
+@keyframes pulse-active {
+  0%, 100% { box-shadow: 0 4px 16px rgba(124, 106, 247, 0.4); }
+  50% { box-shadow: 0 4px 20px rgba(124, 106, 247, 0.7); }
+}
+
+/* ==================== SPRINT SETUP MODAL ==================== */
+
+.sprint-duration-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.sprint-duration-btn {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 14px 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  transition: var(--transition);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.sprint-duration-btn:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.sprint-duration-btn.selected {
+  border-color: var(--accent-primary);
+  background: rgba(124, 106, 247, 0.15);
+  color: var(--accent-primary);
+}
+
+.sprint-duration-btn small {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.sprint-duration-btn.selected small {
+  color: var(--accent-primary);
+}
+
+.sprint-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sprint-setting-row:last-child {
+  border-bottom: none;
+}
+
+.sprint-setting-label {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.sprint-setting-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.sprint-setting-toggle {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background: var(--bg-tertiary);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  flex-shrink: 0;
+}
+
+.sprint-setting-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.sprint-setting-toggle.on {
+  background: var(--accent-primary);
+}
+
+.sprint-setting-toggle.on::after {
+  transform: translateX(18px);
+}
+
+/* ==================== ACTIVE SPRINT BAR ==================== */
+
+.sprint-bar {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: var(--bg-modal);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 8px 8px 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  z-index: 400;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  min-width: 320px;
+}
+
+.sprint-bar.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sprint-bar.break-mode {
+  background: linear-gradient(135deg, var(--bg-modal) 0%, rgba(80, 200, 120, 0.15) 100%);
+  border-color: var(--accent-success);
+}
+
+.sprint-bar.warning {
+  background: linear-gradient(135deg, var(--bg-modal) 0%, rgba(240, 160, 48, 0.15) 100%);
+  border-color: var(--accent-warning);
+}
+
+.sprint-bar-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(124, 106, 247, 0.2);
+  color: var(--accent-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sprint-bar.break-mode .sprint-bar-icon {
+  background: rgba(80, 200, 120, 0.2);
+  color: var(--accent-success);
+}
+
+.sprint-bar.warning .sprint-bar-icon {
+  background: rgba(240, 160, 48, 0.2);
+  color: var(--accent-warning);
+}
+
+.sprint-bar-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sprint-bar-time {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.sprint-bar-status {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sprint-bar-goal {
+  color: var(--accent-primary);
+  font-weight: 500;
+}
+
+.sprint-bar-goal.reached {
+  color: var(--accent-success);
+}
+
+.sprint-bar-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.sprint-bar-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.sprint-bar-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.sprint-bar-btn.stop:hover {
+  background: rgba(224, 85, 85, 0.15);
+  color: var(--accent-danger);
+}
+
+.sprint-bar-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Progress ring inside the bar icon */
+.sprint-progress-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.sprint-progress-ring circle {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.sprint-progress-ring .bg {
+  stroke: rgba(255, 255, 255, 0.1);
+}
+
+.sprint-progress-ring .fill {
+  stroke: currentColor;
+  transition: stroke-dashoffset 1s linear;
+}
+
+/* ==================== SPRINT COMPLETE MODAL ==================== */
+
+.sprint-complete {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.sprint-complete-icon {
+  font-size: 56px;
+  margin-bottom: 12px;
+  animation: bounce-in 0.5s ease;
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+.sprint-complete-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.sprint-complete-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.sprint-complete-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.sprint-stat {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 14px 8px;
+}
+
+.sprint-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.sprint-stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sprint-goal-status {
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.sprint-goal-status.success {
+  background: rgba(80, 200, 120, 0.15);
+  color: var(--accent-success);
+  border-left: 3px solid var(--accent-success);
+}
+
+.sprint-goal-status.missed {
+  background: rgba(240, 160, 48, 0.1);
+  color: var(--accent-warning);
+  border-left: 3px solid var(--accent-warning);
+}
+
+/* ==================== SPRINT HISTORY IN ANALYTICS ==================== */
+
+.sprint-history-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+}
+
+.sprint-history-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(124, 106, 247, 0.15);
+  color: var(--accent-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sprint-history-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sprint-history-title {
+  font-size: 12px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.sprint-history-details {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.sprint-history-words {
+  font-size: 13px;
+  color: var(--accent-primary);
+  font-weight: 600;
+  min-width: 60px;
+  text-align: right;
+}
+
+/* ==================== SPRINT TYPE TABS ==================== */
+
+.sprint-type-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-tertiary);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 20px;
+}
+
+.sprint-type-tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.sprint-type-tab:hover {
+  color: var(--text-primary);
+}
+
+.sprint-type-tab.active {
+  background: var(--accent-primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(124, 106, 247, 0.3);
+}
+
+.sprint-mode-content {
+  display: none;
+}
+
+.sprint-mode-content.active {
+  display: block;
+}
+
+/* Number stepper (for sprint count) */
+.number-stepper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.stepper-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  font-family: var(--font-ui);
+}
+
+.stepper-btn:hover:not(:disabled) {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+  color: var(--accent-primary);
+}
+
+.stepper-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.stepper-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 40px;
+  text-align: center;
+  font-family: var(--font-ui);
+}
+
+/* Break duration grid (smaller) */
+.break-duration-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.break-duration-btn {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 10px 4px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  transition: var(--transition);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.break-duration-btn:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.break-duration-btn.selected {
+  border-color: var(--accent-primary);
+  background: rgba(124, 106, 247, 0.15);
+  color: var(--accent-primary);
+}
+
+.break-duration-btn small {
+  display: block;
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+.break-duration-btn.selected small {
+  color: var(--accent-primary);
+}
+
+/* Sprint duration grid for continuous (smaller) */
+.sprint-mini-duration-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.sprint-mini-duration-btn {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 10px 4px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  transition: var(--transition);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.sprint-mini-duration-btn:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.sprint-mini-duration-btn.selected {
+  border-color: var(--accent-primary);
+  background: rgba(124, 106, 247, 0.15);
+  color: var(--accent-primary);
+}
+
+.sprint-mini-duration-btn small {
+  display: block;
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+.sprint-mini-duration-btn.selected small {
+  color: var(--accent-primary);
+}
+
+/* Preview box */
+.sprint-preview-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-top: 16px;
+}
+
+.sprint-preview-box-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sprint-preview-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.sprint-preview-row strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.sprint-preview-timeline {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.timeline-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  color: white;
+}
+
+.timeline-pill.sprint {
+  background: var(--accent-primary);
+}
+
+.timeline-pill.break {
+  background: var(--accent-success);
+}
+
+/* Sprint bar - continuous mode extras */
+.sprint-bar-progress {
+  color: var(--text-muted);
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+/* ==================== BREAK LOCK OVERLAY ==================== */
+
+.break-lock-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 15, 23, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 450;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: fade-in 0.3s ease;
+}
+
+.break-lock-overlay.visible {
+  display: flex;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.break-lock-content {
+  text-align: center;
+  padding: 40px;
+  max-width: 500px;
+}
+
+.break-lock-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: gentle-bounce 3s ease infinite;
+}
+
+@keyframes gentle-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.break-lock-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.break-lock-message {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.break-lock-timer {
+  font-family: 'Courier New', monospace;
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--accent-success);
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.break-lock-progress {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.break-lock-skip {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 10px 24px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  transition: var(--transition);
+}
+
+.break-lock-skip:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}

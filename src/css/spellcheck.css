@@ -1,0 +1,199 @@
+/* ============================================
+   SPELLCHECK.CSS - Spell check UI
+   ============================================ */
+
+/* Spell check modal */
+.spellcheck-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+}
+
+.spellcheck-status-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.spellcheck-status-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(80, 200, 120, 0.15);
+  color: var(--accent-success);
+}
+
+.spellcheck-status-icon.off {
+  background: rgba(144, 144, 176, 0.15);
+  color: var(--text-muted);
+}
+
+.spellcheck-status-info h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 2px 0;
+}
+
+.spellcheck-status-info p {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Language grid */
+.spellcheck-lang-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px;
+}
+
+.spellcheck-lang-option {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  transition: var(--transition);
+  text-align: left;
+}
+
+.spellcheck-lang-option:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.spellcheck-lang-option.selected {
+  border-color: var(--accent-primary);
+  background: rgba(124, 106, 247, 0.1);
+  color: var(--accent-primary);
+}
+
+.spellcheck-lang-flag {
+  font-size: 20px;
+  flex-shrink: 0;
+  min-width: 26px;
+  text-align: center;
+}
+
+/* Code-based badge (fallback for languages without flag) */
+.spellcheck-lang-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  background: rgba(124, 106, 247, 0.15);
+  padding: 3px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  min-width: 32px;
+  text-align: center;
+  font-family: var(--font-ui);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.spellcheck-lang-option.selected .spellcheck-lang-badge {
+  background: rgba(124, 106, 247, 0.25);
+  color: var(--accent-primary);
+}
+
+.spellcheck-lang-name {
+  font-weight: 500;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.spellcheck-lang-info {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.spellcheck-lang-code {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: 'Courier New', monospace;
+}
+
+.spellcheck-lang-option.selected .spellcheck-lang-code {
+  color: var(--accent-primary);
+}
+
+.spellcheck-check-icon {
+  color: var(--accent-primary);
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.spellcheck-lang-option.selected .spellcheck-check-icon {
+  opacity: 1;
+}
+
+/* Custom words list */
+.custom-words-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  min-height: 40px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.custom-word-chip {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.custom-word-chip button {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+  transition: var(--transition);
+}
+
+.custom-word-chip button:hover {
+  color: var(--accent-danger);
+}
+
+.custom-words-empty {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-style: italic;
+  padding: 8px;
+}

@@ -1,0 +1,490 @@
+/* ============================================
+   ANALYSIS.CSS - Prose analysis & highlighting
+   ============================================ */
+
+/* ==================== ANALYSIS BUTTON IN EDITOR ==================== */
+
+.analysis-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-family: var(--font-ui);
+  transition: var(--transition);
+}
+
+.analysis-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.analysis-btn.active {
+  background: rgba(240, 160, 48, 0.15);
+  color: var(--accent-warning);
+}
+
+.analysis-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ==================== ANALYSIS PANEL ==================== */
+
+.analysis-panel {
+  position: fixed;
+  top: var(--topbar-height);
+  right: -450px;
+  width: 420px;
+  height: calc(100vh - var(--topbar-height));
+  background: var(--bg-modal);
+  border-left: 1px solid var(--border-color);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.3s ease;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.4);
+}
+
+/* When analysis panel is open, shift the floating FABs to the left */
+body.analysis-panel-open .quick-note-fab,
+body.analysis-panel-open .sprint-launcher {
+  right: calc(24px + 420px);
+}
+
+/* Same for versions panel */
+body.versions-panel-open .quick-note-fab,
+body.versions-panel-open .sprint-launcher {
+  right: calc(24px + 420px);
+}
+
+.quick-note-fab,
+.sprint-launcher {
+  transition: right 0.3s ease, transform 0.15s ease, background 0.15s ease;
+}
+
+.analysis-panel.open {
+  right: 0;
+}
+
+.analysis-panel-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+}
+
+.analysis-panel-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.analysis-panel-close {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.analysis-panel-close:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.analysis-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+
+/* ==================== READABILITY CARD ==================== */
+
+.readability-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.readability-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.readability-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.readability-score {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+.readability-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.readability-bar {
+  height: 8px;
+  background: var(--bg-tertiary);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.readability-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    #e05555 0%, 
+    #f0a030 25%, 
+    #f0d030 50%, 
+    #90c850 75%, 
+    #50c878 100%);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.readability-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Grade level pill */
+.readability-grade {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(124, 106, 247, 0.15);
+  color: var(--accent-primary);
+  margin-top: 6px;
+}
+
+/* ==================== CATEGORY TOGGLES ==================== */
+
+.analysis-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.analysis-category {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  overflow: hidden;
+}
+
+.analysis-category.enabled {
+  border-color: transparent;
+}
+
+.analysis-category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.analysis-category-header:hover {
+  background: var(--bg-hover);
+}
+
+.analysis-category-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.analysis-category-name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.analysis-category-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--bg-tertiary);
+  min-width: 24px;
+  text-align: center;
+}
+
+.analysis-category.enabled .analysis-category-count {
+  color: white;
+}
+
+.analysis-category-toggle {
+  width: 34px;
+  height: 20px;
+  background: var(--bg-tertiary);
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+  border: none;
+}
+
+.analysis-category-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.analysis-category.enabled .analysis-category-toggle {
+  background: var(--accent-primary);
+}
+
+.analysis-category.enabled .analysis-category-toggle::after {
+  transform: translateX(14px);
+}
+
+.analysis-category-desc {
+  padding: 0 12px 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  display: none;
+}
+
+.analysis-category.enabled .analysis-category-desc {
+  display: block;
+}
+
+/* Category-specific colors */
+.analysis-category[data-category="adverbs"] .analysis-category-swatch,
+.analysis-category[data-category="adverbs"].enabled .analysis-category-count {
+  background: #f0d030;
+}
+.analysis-category[data-category="filter"] .analysis-category-swatch,
+.analysis-category[data-category="filter"].enabled .analysis-category-count {
+  background: #f0a030;
+}
+.analysis-category[data-category="passive"] .analysis-category-swatch,
+.analysis-category[data-category="passive"].enabled .analysis-category-count {
+  background: #ba68c8;
+}
+.analysis-category[data-category="cliche"] .analysis-category-swatch,
+.analysis-category[data-category="cliche"].enabled .analysis-category-count {
+  background: #4fc3f7;
+}
+.analysis-category[data-category="repetition"] .analysis-category-swatch,
+.analysis-category[data-category="repetition"].enabled .analysis-category-count {
+  background: #e05555;
+}
+.analysis-category[data-category="longSentence"] .analysis-category-swatch,
+.analysis-category[data-category="longSentence"].enabled .analysis-category-count {
+  background: #78909c;
+}
+.analysis-category[data-category="similarMeaning"] .analysis-category-swatch,
+.analysis-category[data-category="similarMeaning"].enabled .analysis-category-count {
+  background: #50c878;
+}
+
+/* ==================== STATS ROW ==================== */
+
+.analysis-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.analysis-stat {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+.analysis-stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.analysis-stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ==================== SECTION HEADERS IN PANEL ==================== */
+
+.analysis-section-header {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 20px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.analysis-section-header:first-child {
+  margin-top: 0;
+}
+
+/* ==================== HIGHLIGHTS IN EDITOR ==================== */
+
+.editor-content .prose-highlight {
+  padding: 0 2px;
+  border-radius: 3px;
+  cursor: help;
+  transition: opacity 0.15s ease;
+}
+
+.editor-content .prose-highlight:hover {
+  opacity: 0.85;
+}
+
+/* Regular word highlights */
+.editor-content .prose-highlight.type-adverbs {
+  background: rgba(240, 208, 48, 0.3);
+  border-bottom: 2px solid #f0d030;
+}
+.editor-content .prose-highlight.type-filter {
+  background: rgba(240, 160, 48, 0.3);
+  border-bottom: 2px solid #f0a030;
+}
+.editor-content .prose-highlight.type-passive {
+  background: rgba(186, 104, 200, 0.3);
+  border-bottom: 2px solid #ba68c8;
+}
+.editor-content .prose-highlight.type-cliche {
+  background: rgba(79, 195, 247, 0.3);
+  border-bottom: 2px solid #4fc3f7;
+}
+.editor-content .prose-highlight.type-repetition {
+  background: rgba(224, 85, 85, 0.3);
+  border-bottom: 2px solid #e05555;
+}
+.editor-content .prose-highlight.type-similarMeaning {
+  background: rgba(80, 200, 120, 0.3);
+  border-bottom: 2px solid #50c878;
+}
+
+/* Long sentence — uses a subtle underline stripe below the text instead of background,
+   so other highlights can show through */
+.editor-content .prose-highlight.type-longSentence {
+  background: transparent;
+  border-bottom: none;
+  box-shadow: inset 0 -2px 0 rgba(120, 144, 156, 0.7);
+  padding-bottom: 3px;
+}
+
+/* Empty state */
+.analysis-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+
+.analysis-empty-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+
+.analysis-empty p {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ==================== REPETITION LIST IN PANEL ==================== */
+
+.repetition-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.repetition-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid #e05555;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.repetition-word {
+  font-family: var(--font-writing);
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.repetition-count {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.repetition-empty {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-style: italic;
+  padding: 12px;
+  text-align: center;
+}

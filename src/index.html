@@ -1,0 +1,3241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-eval'; img-src 'self' data: blob:;">
+
+  <title>WriteFlow</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Merriweather:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/projects.css">
+  <link rel="stylesheet" href="css/tooltips.css">
+  <link rel="stylesheet" href="css/logo.css">
+  <link rel="stylesheet" href="css/polish.css">
+  <link rel="stylesheet" href="css/bookdesign.css">
+  <link rel="stylesheet" href="css/findreplace.css">
+  <link rel="stylesheet" href="css/editor.css">
+  <link rel="stylesheet" href="css/backups.css">
+  <link rel="stylesheet" href="css/editor-modes.css">
+  <link rel="stylesheet" href="css/characters.css">
+  <link rel="stylesheet" href="css/notes.css">
+  <link rel="stylesheet" href="css/moodboard.css">
+  <link rel="stylesheet" href="css/relationships.css">
+  <link rel="stylesheet" href="css/analytics.css">
+  <link rel="stylesheet" href="css/sprints.css">
+  <link rel="stylesheet" href="css/outliner.css">
+  <link rel="stylesheet" href="css/spellcheck.css">
+  <link rel="stylesheet" href="css/versions.css">
+  <link rel="stylesheet" href="css/analysis.css">
+  <link rel="stylesheet" href="css/export.css">
+
+  <!-- Export libraries -->
+  <script src="../node_modules/jspdf/dist/jspdf.umd.min.js"></script>
+  <script src="../node_modules/file-saver/dist/FileSaver.min.js"></script>
+</head>
+
+<body>
+
+  <!-- ============================================ -->
+  <!-- LOADING SCREEN -->
+  <!-- ============================================ -->
+  <div id="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <span class="logo-icon">✍</span>
+        <span class="logo-text">WriteFlow</span>
+      </div>
+      <div class="loading-bar">
+        <div class="loading-bar-fill"></div>
+      </div>
+      <p class="loading-text">Loading your workspace...</p>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- MAIN APP -->
+  <!-- ============================================ -->
+  <div id="app" class="hidden">
+
+    <!-- TOP BAR -->
+    <div id="top-bar">
+      <div class="top-bar-left">
+        <button id="sidebar-toggle" class="icon-btn" data-tooltip="Toggle Sidebar (Ctrl+B)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <div class="app-logo" id="app-logo-btn" data-tooltip="Go to Projects">
+          <span class="logo-icon">✍</span>
+          <span class="logo-text">WriteFlow</span>
+        </div>
+      </div>
+
+      <div class="top-bar-center">
+        <div id="breadcrumbs">
+          <span class="breadcrumb-item" id="breadcrumb-home">Projects</span>
+        </div>
+      </div>
+
+      <div class="top-bar-right">
+        <button id="back-to-projects-btn" class="icon-btn hidden" data-tooltip="Back to Projects">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+            </path>
+          </svg>
+        </button>
+
+        <button id="settings-btn" class="icon-btn" data-tooltip="Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+              d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z">
+            </path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main-content">
+
+      <!-- LEFT SIDEBAR -->
+      <div id="sidebar">
+
+        <div id="sidebar-nav">
+          <button class="nav-btn active" data-view="chapters" data-tooltip="Chapters">
+            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+            </svg>
+            <span class="nav-label">Chapters</span>
+          </button>
+
+          <button class="nav-btn" data-view="characters" data-tooltip="Characters">
+            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span class="nav-label">Characters</span>
+          </button>
+
+          <button class="nav-btn" data-view="notes" data-tooltip="Notes">
+            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span class="nav-label">Notes</span>
+          </button>
+
+          <button class="nav-btn" data-view="moodboard" data-tooltip="Moodboard">
+            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span class="nav-label">Moodboard</span>
+          </button>
+
+          <button class="nav-btn" data-view="relationships" data-tooltip="Relationships">
+            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+            <span class="nav-label">Relations</span>
+          </button>
+
+          <button class="nav-btn" data-view="outliner" data-tooltip="Outliner">
+            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+            <span class="nav-label">Outliner</span>
+          </button>
+
+          <button class="nav-btn" data-view="analytics" data-tooltip="Writing Analytics">
+            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span class="nav-label">Stats</span>
+          </button>
+
+          <button class="nav-btn" data-view="bookdesign" data-tooltip="Book Design & Export">
+            <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+              <line x1="8" y1="7" x2="16" y2="7"></line>
+              <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+            <span class="nav-label">Export</span>
+          </button>
+        </div>
+
+        <div id="sidebar-content">
+          <div class="sidebar-placeholder">
+            <div class="placeholder-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+              </svg>
+            </div>
+            <p>Open a project to see chapters</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VIEW CONTAINER -->
+      <div id="view-container">
+
+        <!-- HOME VIEW -->
+        <div id="view-home" class="view active">
+          <div class="welcome-screen">
+            <div class="welcome-logo">
+              <span class="logo-icon-large">✍</span>
+              <h1>WriteFlow</h1>
+              <p>Your distraction-free novel writing workspace</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROJECTS VIEW -->
+        <div id="view-projects" class="view hidden">
+          <div class="projects-container">
+
+            <div class="projects-header">
+              <div>
+                <h1>My Novels</h1>
+                <p class="projects-subtitle">Welcome back! Continue where you left off.</p>
+              </div>
+              <div class="projects-header-actions">
+                <div class="search-box">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" id="project-search" placeholder="Search novels..." />
+                </div>
+
+                <div class="filter-dropdown">
+                  <select id="filter-genre">
+                    <option value="">All Genres</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="sci-fi">Science Fiction</option>
+                    <option value="romance">Romance</option>
+                    <option value="thriller">Thriller</option>
+                    <option value="mystery">Mystery</option>
+                    <option value="horror">Horror</option>
+                    <option value="literary">Literary Fiction</option>
+                    <option value="historical">Historical Fiction</option>
+                    <option value="ya">Young Adult</option>
+                    <option value="childrens">Children's</option>
+                    <option value="nonfiction">Non-Fiction</option>
+                    <option value="memoir">Memoir</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div class="filter-dropdown">
+                  <select id="sort-by">
+                    <option value="recent">Recently Modified</option>
+                    <option value="created">Recently Created</option>
+                    <option value="alphabetical">Alphabetical (A-Z)</option>
+                    <option value="alphabetical-desc">Alphabetical (Z-A)</option>
+                    <option value="most-words">Most Words</option>
+                    <option value="least-words">Least Words</option>
+                  </select>
+                </div>
+
+                <button class="btn-primary" id="btn-new-project-header">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  New Novel
+                </button>
+              </div>
+            </div>
+
+            <div class="projects-grid" id="projects-grid"></div>
+
+            <div class="projects-empty hidden" id="projects-empty">
+              <div class="empty-illustration">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+                </svg>
+              </div>
+              <h2>No novels yet</h2>
+              <p>Start your writing journey by creating your first novel</p>
+              <button class="btn-primary" id="btn-new-project-empty">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Create Your First Novel
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- EDITOR VIEW -->
+        <div id="view-editor" class="view hidden">
+
+          <!-- Empty state (no chapter selected) -->
+          <div id="editor-empty" class="editor-empty">
+            <div class="editor-empty-icon">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+              </svg>
+            </div>
+            <h2>No chapter selected</h2>
+            <p>Choose a chapter from the sidebar or create a new one to start writing</p>
+            <button class="btn-primary" id="btn-editor-add-chapter">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Create New Chapter
+            </button>
+          </div>
+
+          <!-- Full editor (visible when chapter selected) -->
+          <div id="editor-main" class="hidden" style="display: flex; flex-direction: column; height: 100%;">
+
+            <!-- Toolbar -->
+            <div class="editor-toolbar">
+
+              <!-- Undo/Redo -->
+              <div class="toolbar-group">
+                <button class="toolbar-btn" data-command="undo" data-tooltip="Undo (Ctrl+Z)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M3 7v6h6"></path>
+                    <path d="M21 17a9 9 0 00-15-6.7L3 13"></path>
+                  </svg>
+                </button>
+                <button class="toolbar-btn" data-command="redo" data-tooltip="Redo (Ctrl+Y)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M21 7v6h-6"></path>
+                    <path d="M3 17a9 9 0 0115-6.7L21 13"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Headings -->
+              <div class="toolbar-group">
+                <div class="toolbar-dropdown">
+                  <button class="toolbar-btn toolbar-btn-wide" id="heading-dropdown-btn" data-tooltip="Text Style">
+                    <span id="heading-current">Paragraph</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                  <div class="toolbar-dropdown-menu" id="heading-dropdown-menu">
+                    <button class="toolbar-dropdown-item" data-block="p">
+                      <span class="toolbar-dropdown-preview">P</span>
+                      Paragraph
+                    </button>
+                    <button class="toolbar-dropdown-item" data-block="h1">
+                      <span class="toolbar-dropdown-preview" style="font-size: 20px; font-weight: bold;">H1</span>
+                      Heading 1
+                    </button>
+                    <button class="toolbar-dropdown-item" data-block="h2">
+                      <span class="toolbar-dropdown-preview" style="font-size: 17px; font-weight: bold;">H2</span>
+                      Heading 2
+                    </button>
+                    <button class="toolbar-dropdown-item" data-block="h3">
+                      <span class="toolbar-dropdown-preview" style="font-size: 15px; font-weight: bold;">H3</span>
+                      Heading 3
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Formatting -->
+              <div class="toolbar-group">
+                <button class="toolbar-btn" data-command="bold" data-tooltip="Bold (Ctrl+B)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z"></path>
+                    <path d="M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z"></path>
+                  </svg>
+                </button>
+                <button class="toolbar-btn" data-command="italic" data-tooltip="Italic (Ctrl+I)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="4" x2="10" y2="4"></line>
+                    <line x1="14" y1="20" x2="5" y2="20"></line>
+                    <line x1="15" y1="4" x2="9" y2="20"></line>
+                  </svg>
+                </button>
+                <button class="toolbar-btn" data-command="underline" data-tooltip="Underline (Ctrl+U)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M6 3v7a6 6 0 006 6 6 6 0 006-6V3"></path>
+                    <line x1="4" y1="21" x2="20" y2="21"></line>
+                  </svg>
+                </button>
+                <button class="toolbar-btn" data-command="strikeThrough" data-tooltip="Strikethrough">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M16 4H9a3 3 0 00-2.83 4"></path>
+                    <path d="M14 12a4 4 0 010 8H6"></path>
+                    <line x1="4" y1="12" x2="20" y2="12"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Alignment -->
+              <div class="toolbar-group">
+                <button class="toolbar-btn" data-command="justifyLeft" data-tooltip="Align Left">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="17" y1="10" x2="3" y2="10"></line>
+                    <line x1="21" y1="6" x2="3" y2="6"></line>
+                    <line x1="21" y1="14" x2="3" y2="14"></line>
+                    <line x1="17" y1="18" x2="3" y2="18"></line>
+                  </svg>
+                </button>
+                <button class="toolbar-btn" data-command="justifyCenter" data-tooltip="Align Center">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="18" y1="10" x2="6" y2="10"></line>
+                    <line x1="21" y1="6" x2="3" y2="6"></line>
+                    <line x1="21" y1="14" x2="3" y2="14"></line>
+                    <line x1="18" y1="18" x2="6" y2="18"></line>
+                  </svg>
+                </button>
+                <button class="toolbar-btn" data-command="justifyRight" data-tooltip="Align Right">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="21" y1="10" x2="7" y2="10"></line>
+                    <line x1="21" y1="6" x2="3" y2="6"></line>
+                    <line x1="21" y1="14" x2="3" y2="14"></line>
+                    <line x1="21" y1="18" x2="7" y2="18"></line>
+                  </svg>
+                </button>
+                <button class="toolbar-btn" data-command="justifyFull" data-tooltip="Justify">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="21" y1="10" x2="3" y2="10"></line>
+                    <line x1="21" y1="6" x2="3" y2="6"></line>
+                    <line x1="21" y1="14" x2="3" y2="14"></line>
+                    <line x1="21" y1="18" x2="3" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Lists & Quote -->
+              <div class="toolbar-group">
+                <button class="toolbar-btn" data-command="insertUnorderedList" data-tooltip="Bulleted List">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                  </svg>
+                </button>
+                <button class="toolbar-btn" data-command="insertOrderedList" data-tooltip="Numbered List">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="10" y1="6" x2="21" y2="6"></line>
+                    <line x1="10" y1="12" x2="21" y2="12"></line>
+                    <line x1="10" y1="18" x2="21" y2="18"></line>
+                    <path d="M4 6h1v4"></path>
+                    <path d="M4 10h2"></path>
+                    <path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path>
+                  </svg>
+                </button>
+                <button class="toolbar-btn" data-block="blockquote" data-tooltip="Quote">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path
+                      d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z">
+                    </path>
+                    <path
+                      d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z">
+                    </path>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Scene Breaks -->
+              <div class="toolbar-group">
+                <div class="toolbar-dropdown">
+                  <button class="toolbar-btn toolbar-btn-wide" id="scenebreak-dropdown-btn"
+                    data-tooltip="Insert Scene Break">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" style="width: 14px; height: 14px;">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <circle cx="5" cy="12" r="1"></circle>
+                      <circle cx="12" cy="12" r="1"></circle>
+                      <circle cx="19" cy="12" r="1"></circle>
+                    </svg>
+                    <span>Break</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                  <div class="toolbar-dropdown-menu" id="scenebreak-dropdown-menu">
+                    <button class="toolbar-dropdown-item" data-scenebreak="asterisks">
+                      <span class="scene-break-preview">* * *</span>
+                      Asterisks
+                    </button>
+                    <button class="toolbar-dropdown-item" data-scenebreak="dots">
+                      <span class="scene-break-preview">• • •</span>
+                      Dots
+                    </button>
+                    <button class="toolbar-dropdown-item" data-scenebreak="dashes">
+                      <span class="scene-break-preview">— — —</span>
+                      Dashes
+                    </button>
+                    <button class="toolbar-dropdown-item" data-scenebreak="ornament">
+                      <span class="scene-break-preview">❦</span>
+                      Ornament
+                    </button>
+                    <button class="toolbar-dropdown-item" data-scenebreak="flourish">
+                      <span class="scene-break-preview">❋</span>
+                      Flourish
+                    </button>
+                    <button class="toolbar-dropdown-item" data-scenebreak="line">
+                      <span class="scene-break-preview">——</span>
+                      Line
+                    </button>
+                  </div>
+                </div>
+                <!-- Font Size -->
+                <div class="toolbar-group">
+                  <div class="font-size-control">
+                    <button class="font-size-btn" id="font-decrease" data-tooltip="Decrease Font Size">A−</button>
+                    <span class="font-size-value" id="font-size-value">18</span>
+                    <button class="font-size-btn" id="font-increase" data-tooltip="Increase Font Size">A+</button>
+                  </div>
+                </div>
+
+                <!-- Line Width -->
+                <div class="toolbar-group">
+                  <div class="line-width-control">
+                    <button class="line-width-btn" data-width="narrow" data-tooltip="Narrow Column">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="4" width="6" height="16" rx="1"></rect>
+                      </svg>
+                    </button>
+                    <button class="line-width-btn active" data-width="medium" data-tooltip="Medium Column">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="6" y="4" width="12" height="16" rx="1"></rect>
+                      </svg>
+                    </button>
+                    <button class="line-width-btn" data-width="wide" data-tooltip="Wide Column">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="16" rx="1"></rect>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Prose Analysis -->
+                <div class="toolbar-group">
+                  <button class="analysis-btn" id="btn-analysis" data-tooltip="Analyze Prose">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M12 20h9"></path>
+                      <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                      <line x1="12" y1="4" x2="20" y2="4"></line>
+                    </svg>
+                    <span>Analyze</span>
+                  </button>
+                </div>
+
+                <!-- Scene Versions -->
+                <div class="toolbar-group">
+                  <button class="versions-btn" id="btn-versions" data-tooltip="Scene Versions">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <circle cx="18" cy="18" r="3"></circle>
+                      <circle cx="6" cy="6" r="3"></circle>
+                      <path d="M13 6h3a2 2 0 0 1 2 2v7"></path>
+                      <line x1="6" y1="9" x2="6" y2="21"></line>
+                    </svg>
+                    <span>Versions</span>
+                    <span class="versions-count-badge hidden" id="versions-count">1</span>
+                  </button>
+                </div>
+
+                <!-- Writing Modes -->
+                <div class="toolbar-group">
+                  <button class="toolbar-btn mode-btn" id="mode-focus-btn" data-tooltip="Focus Mode (Ctrl+Shift+F)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <circle cx="12" cy="12" r="4"></circle>
+                      <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
+                      <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
+                      <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line>
+                      <line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line>
+                      <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line>
+                    </svg>
+                  </button>
+                  <button class="toolbar-btn mode-btn" id="mode-typewriter-btn"
+                    data-tooltip="Typewriter Mode (Ctrl+Shift+T)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M4 8h16"></path>
+                      <path d="M2 12h20"></path>
+                      <path d="M2 16h20"></path>
+                      <path d="M4 20h16"></path>
+                      <path d="M6 4h12v4H6z"></path>
+                    </svg>
+                  </button>
+                  <button class="toolbar-btn mode-btn" id="mode-fullscreen-btn" data-tooltip="Fullscreen (F11)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M8 3H5a2 2 0 00-2 2v3"></path>
+                      <path d="M21 8V5a2 2 0 00-2-2h-3"></path>
+                      <path d="M3 16v3a2 2 0 002 2h3"></path>
+                      <path d="M16 21h3a2 2 0 002-2v-3"></path>
+                    </svg>
+                  </button>
+                  <button class="toolbar-btn mode-btn" id="mode-zen-btn" data-tooltip="Zen Mode (Ctrl+Shift+Z)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M12 2a10 10 0 100 20 10 10 0 000-20z"></path>
+                      <path d="M12 6v6l4 2"></path>
+                    </svg>
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Editor content area -->
+            <div class="editor-container">
+              <div class="editor-wrapper">
+
+                <!-- Chapter title -->
+                <input type="text" id="editor-chapter-title" class="chapter-title-input" placeholder="Chapter Title"
+                  autocomplete="off" />
+
+                <!-- Chapter summary (collapsible) -->
+                <div class="chapter-summary-section">
+                  <button class="chapter-summary-toggle" id="summary-toggle">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    Chapter Summary
+                  </button>
+                  <div class="chapter-summary-content" id="summary-content">
+                    <textarea id="editor-chapter-summary" class="chapter-summary-textarea"
+                      placeholder="Add a brief summary or outline of this chapter (optional). This helps you keep track of what happens..."></textarea>
+                  </div>
+                </div>
+
+                <!-- Actual writing area -->
+                <div id="editor-content" class="editor-content" contenteditable="true"
+                  data-placeholder="Start writing your chapter here..." spellcheck="true"></div>
+              </div>
+            </div>
+
+            <!-- Footer stats bar -->
+            <div class="editor-footer">
+              <div class="editor-stats">
+                <!-- Session timer inline -->
+                <div class="editor-session-stats" id="editor-session-stats">
+                  <div class="session-timer-dot" id="session-timer-dot"></div>
+                  <span class="session-timer-time" id="session-time">0:00</span>
+                  <span class="session-timer-words" id="session-words">0 words</span>
+                </div>
+                <div class="editor-stat">
+                  <span class="editor-stat-value" id="stat-words">0</span>
+                  <span>words</span>
+                </div>
+                <div class="editor-stat">
+                  <span class="editor-stat-value" id="stat-chars">0</span>
+                  <span>characters</span>
+                </div>
+                <div class="editor-stat">
+                  <span class="editor-stat-value" id="stat-sentences">0</span>
+                  <span>sentences</span>
+                </div>
+                <div class="editor-stat">
+                  <span class="editor-stat-value" id="stat-reading-time">0 min</span>
+                  <span>read</span>
+                </div>
+              </div>
+              <div class="editor-save-status saved" id="save-status">
+                <span class="save-dot"></span>
+                <span id="save-status-text">Saved</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- CHARACTERS VIEW (NEW: portrait cards + tabbed profile) -->
+        <div id="view-characters" class="view hidden">
+
+          <!-- Grid view -->
+          <div id="characters-list-view" class="characters-container">
+            <div class="characters-header">
+              <div class="characters-header-left">
+                <h1>Characters</h1>
+                <p id="characters-count-text">0 characters</p>
+              </div>
+              <div class="characters-header-actions">
+                <div class="search-box">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" id="character-search" placeholder="Search characters..." />
+                </div>
+                <div class="filter-dropdown">
+                  <select id="character-role-filter">
+                    <option value="">All Roles</option>
+                    <option value="protagonist">Protagonist</option>
+                    <option value="antagonist">Antagonist</option>
+                    <option value="supporting">Supporting</option>
+                    <option value="love-interest">Love Interest</option>
+                    <option value="mentor">Mentor</option>
+                    <option value="minor">Minor</option>
+                  </select>
+                </div>
+                <button class="btn-primary" id="btn-new-character">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  New Character
+                </button>
+              </div>
+            </div>
+
+            <div class="characters-grid" id="characters-grid"></div>
+
+            <div class="characters-empty hidden" id="characters-empty">
+              <div class="characters-empty-icon">
+                <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <h2>No characters yet</h2>
+              <p>Create your first character to bring your story to life</p>
+              <button class="btn-primary" id="btn-new-character-empty">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Create First Character
+              </button>
+            </div>
+          </div>
+
+          <!-- Detail view with tabs -->
+          <div id="characters-detail-view" class="character-detail hidden">
+
+            <!-- Left sidebar within character view -->
+            <div class="character-detail-sidebar">
+              <div class="character-detail-sidebar-header">
+                <button class="character-detail-back" id="btn-character-back">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                  Characters
+                </button>
+                <div class="character-sidebar-portrait" id="character-sidebar-portrait">
+                  <div class="character-sidebar-portrait-hint">Click to change</div>
+                </div>
+                <div class="character-sidebar-name" id="character-sidebar-name">Name</div>
+              </div>
+
+              <div class="character-sidebar-quickstats">
+                <div class="character-sidebar-stat">
+                  <span class="character-sidebar-stat-label">Type</span>
+                  <span class="character-sidebar-stat-value" id="character-sidebar-type">—</span>
+                </div>
+                <div class="character-sidebar-stat">
+                  <span class="character-sidebar-stat-label">Mentions</span>
+                  <span class="character-sidebar-stat-value" id="character-sidebar-mentions">0</span>
+                </div>
+                <div class="character-sidebar-stat">
+                  <span class="character-sidebar-stat-label">Appears in</span>
+                  <span class="character-sidebar-stat-value" id="character-sidebar-appears">0 Chs</span>
+                </div>
+              </div>
+
+              <div class="character-detail-tabs">
+                <button class="character-tab active" data-tab="profile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  Profile
+                </button>
+                <button class="character-tab" data-tab="details">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                  </svg>
+                  Details
+                </button>
+                <button class="character-tab" data-tab="relations">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                  </svg>
+                  Relations
+                </button>
+                <button class="character-tab" data-tab="appearances">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+                  </svg>
+                  Appearances
+                </button>
+              </div>
+
+              <button class="character-detail-delete-btn" id="btn-delete-character">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"></path>
+                </svg>
+                Delete Character
+              </button>
+            </div>
+
+            <!-- Main content area (tabs) -->
+            <div class="character-detail-main">
+
+              <!-- PROFILE TAB -->
+              <div class="character-tab-content active" data-tab-content="profile">
+
+                <div class="character-profile-header">
+                  <div class="character-profile-portrait" id="character-profile-portrait">
+                    <div class="character-profile-portrait-upload-hint">Click to upload image (max 3MB)</div>
+                  </div>
+
+                  <div class="character-profile-info">
+                    <input type="text" class="character-profile-name-input" id="char-name"
+                      placeholder="Character name" />
+                    <input type="text" class="character-profile-nickname-input" id="char-nickname"
+                      placeholder='"Nickname or alias"' />
+                    <select class="character-profile-role-select" id="char-role">
+                      <option value="protagonist">Protagonist</option>
+                      <option value="antagonist">Antagonist</option>
+                      <option value="supporting">Supporting</option>
+                      <option value="love-interest">Love Interest</option>
+                      <option value="mentor">Mentor</option>
+                      <option value="minor">Minor</option>
+                    </select>
+
+                    <div class="character-profile-stats">
+                      <div class="character-profile-stat">
+                        <span class="character-profile-stat-label">Mentions</span>
+                        <span class="character-profile-stat-value" id="profile-mentions">0</span>
+                      </div>
+                      <div class="character-profile-stat">
+                        <span class="character-profile-stat-label">Chapters</span>
+                        <span class="character-profile-stat-value" id="profile-chapters">0</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <input type="file" id="character-avatar-input" accept="image/*" style="display:none;" />
+
+                <!-- Color picker -->
+                <div class="character-color-picker-compact">
+                  <span class="character-color-picker-compact-label">Color</span>
+                  <div class="color-swatch" data-color="#7c6af7" style="background:#7c6af7"></div>
+                  <div class="color-swatch" data-color="#e05555" style="background:#e05555"></div>
+                  <div class="color-swatch" data-color="#50c878" style="background:#50c878"></div>
+                  <div class="color-swatch" data-color="#f0a030" style="background:#f0a030"></div>
+                  <div class="color-swatch" data-color="#ee6a99" style="background:#ee6a99"></div>
+                  <div class="color-swatch" data-color="#4fc3f7" style="background:#4fc3f7"></div>
+                  <div class="color-swatch" data-color="#ba68c8" style="background:#ba68c8"></div>
+                  <div class="color-swatch" data-color="#8d6e63" style="background:#8d6e63"></div>
+                  <div class="color-swatch" data-color="#78909c" style="background:#78909c"></div>
+                </div>
+
+                <!-- Bio -->
+                <div class="character-bio-section">
+                  <textarea class="character-bio-textarea" id="char-bio"
+                    placeholder="Write a short bio or intro for this character..."></textarea>
+                </div>
+
+                <!-- Tags -->
+                <div style="margin-bottom: 20px;">
+                  <label
+                    style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 8px; display: block;">Tags</label>
+                  <div class="tags-container" id="character-tags-container">
+                    <input type="text" class="tag-input" id="tag-input" placeholder="Add tags..." />
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- DETAILS TAB (custom fields — Part 2) -->
+              <div class="character-tab-content" data-tab-content="details">
+                <div id="details-tab-content">
+                  <div class="tab-empty-state">
+                    <h3>Details System</h3>
+                    <p>Coming in Part 2 of Stage 19 — custom fields, sections, and templates!</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RELATIONS TAB (Part 3) -->
+              <div class="character-tab-content" data-tab-content="relations">
+                <div id="relations-tab-content">
+                  <div class="tab-empty-state">
+                    <h3>Character Relations</h3>
+                    <p>Coming in Part 3 of Stage 19 — rich relationship cards with intensity and details!</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- APPEARANCES TAB -->
+              <div class="character-tab-content" data-tab-content="appearances">
+                <h2 style="font-size: 20px; margin-bottom: 8px; color: var(--text-primary);">Chapter Appearances</h2>
+                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">Chapters where this character
+                  is @mentioned</p>
+                <div class="appearances-list" id="character-appearances-list"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTES VIEW -->
+        <div id="view-notes" class="view hidden">
+
+          <!-- List view -->
+          <div id="notes-list-view" class="notes-container">
+            <div class="notes-header">
+              <div class="notes-header-left">
+                <h1>Notes</h1>
+                <p id="notes-count-text">0 notes</p>
+              </div>
+              <div class="notes-header-actions">
+                <div class="search-box">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" id="note-search" placeholder="Search notes..." />
+                </div>
+                <div class="filter-dropdown">
+                  <select id="note-category-filter">
+                    <option value="">All Categories</option>
+                    <option value="general">General</option>
+                    <option value="idea">Ideas</option>
+                    <option value="research">Research</option>
+                    <option value="plot">Plot</option>
+                    <option value="worldbuilding">Worldbuilding</option>
+                    <option value="character">Character</option>
+                  </select>
+                </div>
+                <div class="filter-dropdown">
+                  <select id="note-sort">
+                    <option value="pinned-recent">Pinned + Recent</option>
+                    <option value="recent">Recently Modified</option>
+                    <option value="created">Recently Created</option>
+                    <option value="alphabetical">Alphabetical</option>
+                  </select>
+                </div>
+                <button class="btn-primary" id="btn-new-note">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  New Note
+                </button>
+              </div>
+            </div>
+
+            <div class="notes-grid" id="notes-grid"></div>
+
+            <div class="notes-empty hidden" id="notes-empty">
+              <div class="notes-empty-icon">
+                <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+              </div>
+              <h2>No notes yet</h2>
+              <p>Capture ideas, research, and inspiration for your story</p>
+              <button class="btn-primary" id="btn-new-note-empty">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Create First Note
+              </button>
+            </div>
+          </div>
+
+          <!-- Detail view -->
+          <div id="notes-detail-view" class="note-detail hidden">
+            <div class="note-detail-header">
+              <button class="note-detail-back" id="btn-note-back">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                All Notes
+              </button>
+              <div class="note-detail-controls">
+                <select class="note-category-select" id="note-detail-category">
+                  <option value="general">📋 General</option>
+                  <option value="idea">💡 Idea</option>
+                  <option value="research">🔍 Research</option>
+                  <option value="plot">📖 Plot</option>
+                  <option value="worldbuilding">🌍 Worldbuilding</option>
+                  <option value="character">👤 Character</option>
+                </select>
+
+                <button class="note-color-btn" id="btn-note-color">
+                  <span id="note-color-preview"
+                    style="width:14px;height:14px;border-radius:50%;background:var(--accent-primary);display:inline-block;"></span>
+                  Color
+                </button>
+
+                <button class="note-pin-btn" id="btn-note-pin">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="17" x2="12" y2="22"></line>
+                    <path
+                      d="M5 17h14v-1.76a2 2 0 00-1.11-1.79l-1.78-.9A2 2 0 0115 10.76V6h1a2 2 0 002-2V3H6v1a2 2 0 002 2h1v4.76a2 2 0 01-1.11 1.79l-1.78.9A2 2 0 005 15.24z">
+                    </path>
+                  </svg>
+                  Pin
+                </button>
+
+                <button class="note-detail-delete-btn" id="btn-delete-note">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+                  </svg>
+                  Delete
+                </button>
+              </div>
+            </div>
+
+            <!-- Color picker popup -->
+            <div class="note-color-menu" id="note-color-menu">
+              <div class="note-color-option" data-color="#7c6af7" style="background:#7c6af7"></div>
+              <div class="note-color-option" data-color="#e05555" style="background:#e05555"></div>
+              <div class="note-color-option" data-color="#50c878" style="background:#50c878"></div>
+              <div class="note-color-option" data-color="#f0a030" style="background:#f0a030"></div>
+              <div class="note-color-option" data-color="#ee6a99" style="background:#ee6a99"></div>
+              <div class="note-color-option" data-color="#4fc3f7" style="background:#4fc3f7"></div>
+              <div class="note-color-option" data-color="#ba68c8" style="background:#ba68c8"></div>
+              <div class="note-color-option" data-color="#8d6e63" style="background:#8d6e63"></div>
+            </div>
+
+            <div class="note-detail-body">
+              <input type="text" id="note-detail-title" class="note-title-input" placeholder="Note title..."
+                autocomplete="off" />
+
+              <div class="note-tags-section">
+                <div class="tags-container" id="note-tags-container">
+                  <input type="text" class="tag-input" id="note-tag-input" placeholder="Add tags..." />
+                </div>
+              </div>
+
+              <textarea id="note-detail-content" class="note-content-textarea"
+                placeholder="Start writing your note..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sprint Launcher FAB -->
+        <button class="sprint-launcher" id="sprint-launcher" title="Start Writing Sprint (Ctrl+Shift+S)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </button>
+
+        <!-- Active Sprint Bar -->
+        <div class="sprint-bar" id="sprint-bar">
+          <div class="sprint-bar-icon" id="sprint-bar-icon" style="position: relative;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" id="sprint-bar-svg-icon">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <svg class="sprint-progress-ring" viewBox="0 0 36 36">
+              <circle class="bg" cx="18" cy="18" r="15"></circle>
+              <circle class="fill" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="0"
+                id="sprint-progress-fill"></circle>
+            </svg>
+          </div>
+          <div class="sprint-bar-info">
+            <div class="sprint-bar-time" id="sprint-bar-time">00:00</div>
+            <div class="sprint-bar-status" id="sprint-bar-status">Sprint in progress</div>
+          </div>
+          <div class="sprint-bar-actions">
+            <button class="sprint-bar-btn" id="sprint-bar-pause" title="Pause">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+              </svg>
+            </button>
+            <button class="sprint-bar-btn stop" id="sprint-bar-stop" title="End sprint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Note FAB (Floating Action Button) -->
+        <button class="quick-note-fab hidden" id="quick-note-fab" title="Quick Note">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+            <line x1="9" y1="15" x2="15" y2="15"></line>
+          </svg>
+        </button>
+
+        <!-- Quick Note Panel -->
+        <div class="quick-note-panel" id="quick-note-panel">
+          <div class="quick-note-header">
+            <h3>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              Quick Note
+            </h3>
+            <button class="quick-note-close" id="quick-note-close">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+          <div class="quick-note-body">
+            <input type="text" id="quick-note-title" class="quick-note-title-input" placeholder="Title (optional)..."
+              autocomplete="off" />
+            <textarea id="quick-note-content" class="quick-note-content-input"
+              placeholder="Jot down your thought..."></textarea>
+          </div>
+          <div class="quick-note-footer">
+            <select class="quick-note-category-mini" id="quick-note-category">
+              <option value="general">📋 General</option>
+              <option value="idea">💡 Idea</option>
+              <option value="research">🔍 Research</option>
+              <option value="plot">📖 Plot</option>
+              <option value="worldbuilding">🌍 Worldbuilding</option>
+              <option value="character">👤 Character</option>
+            </select>
+            <button class="quick-note-save" id="quick-note-save">Save</button>
+          </div>
+        </div>
+
+        <!-- Delete Note Modal -->
+        <div id="modal-delete-note" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box modal-small">
+            <div class="modal-header">
+              <h2>Delete Note?</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to delete <strong id="delete-note-name"></strong>?</p>
+              <p class="warning-text">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary modal-cancel">Cancel</button>
+              <button class="btn-danger" id="btn-confirm-delete-note">Delete Note</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MOODBOARD VIEW -->
+        <div id="view-moodboard" class="view hidden">
+
+          <!-- Empty state -->
+          <div id="moodboard-empty" class="moodboard-empty">
+            <div class="moodboard-empty-icon">
+              <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+            </div>
+            <h2>No moodboards yet</h2>
+            <p>Create visual inspiration for your story — collect images, colors, and ideas</p>
+            <button class="btn-primary" id="btn-new-moodboard-empty">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Create First Moodboard
+            </button>
+          </div>
+
+          <!-- Moodboard active view -->
+          <div id="moodboard-active" class="hidden" style="display:flex; flex-direction:column; height:100%;">
+
+            <div class="moodboard-toolbar">
+              <input type="text" class="moodboard-title" id="moodboard-title-input" placeholder="Moodboard name..."
+                autocomplete="off" />
+
+              <div class="moodboard-toolbar-group">
+                <button class="moodboard-toolbar-btn" id="btn-zoom-out" data-tooltip="Zoom Out">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                  </svg>
+                </button>
+                <span class="moodboard-zoom-display" id="zoom-display">100%</span>
+                <button class="moodboard-toolbar-btn" id="btn-zoom-in" data-tooltip="Zoom In">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="11" y1="8" x2="11" y2="14"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                  </svg>
+                </button>
+                <button class="moodboard-toolbar-btn" id="btn-reset-view" data-tooltip="Reset View">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"></polyline>
+                    <path d="M3.51 15a9 9 0 102.13-9.36L1 10"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="moodboard-toolbar-group">
+                <button class="moodboard-toolbar-btn" id="btn-grid-snap" data-tooltip="Toggle Grid Snap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                  </svg>
+                  Grid
+                </button>
+              </div>
+
+              <div class="moodboard-toolbar-group">
+                <button class="moodboard-toolbar-btn" id="btn-delete-moodboard" style="color: var(--accent-danger);"
+                  data-tooltip="Delete this moodboard">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="moodboard-canvas-container" id="moodboard-canvas-container">
+              <div class="moodboard-canvas" id="moodboard-canvas"></div>
+
+              <div class="moodboard-add-panel">
+                <button class="moodboard-add-btn" id="btn-add-image">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  Image
+                </button>
+                <button class="moodboard-add-btn" id="btn-add-text">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                    <line x1="9" y1="20" x2="15" y2="20"></line>
+                    <line x1="12" y1="4" x2="12" y2="20"></line>
+                  </svg>
+                  Text
+                </button>
+                <button class="moodboard-add-btn" id="btn-add-color">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="13.5" cy="6.5" r=".5"></circle>
+                    <circle cx="17.5" cy="10.5" r=".5"></circle>
+                    <circle cx="8.5" cy="7.5" r=".5"></circle>
+                    <circle cx="6.5" cy="12.5" r=".5"></circle>
+                    <path
+                      d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125 0-.941.746-1.688 1.688-1.688h1.996c3.081 0 5.5-2.42 5.5-5.5C22 6.081 17.52 2 12 2z">
+                    </path>
+                  </svg>
+                  Color
+                </button>
+                <button class="moodboard-add-btn" id="btn-add-todo">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="9 11 12 14 22 4"></polyline>
+                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+                  </svg>
+                  To-Do
+                </button>
+                <button class="moodboard-add-btn" id="btn-add-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"></path>
+                  </svg>
+                  Link
+                </button>
+                <button class="moodboard-add-btn" id="btn-add-table">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="3" y1="15" x2="21" y2="15"></line>
+                    <line x1="9" y1="3" x2="9" y2="21"></line>
+                    <line x1="15" y1="3" x2="15" y2="21"></line>
+                  </svg>
+                  Table
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <input type="file" id="moodboard-image-input" accept="image/*" style="display:none;" />
+        </div>
+
+        <!-- Add Link Modal -->
+        <div id="modal-add-link" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box modal-small">
+            <div class="modal-header">
+              <h2 id="link-modal-title">Add Link</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <div class="link-input-container">
+                <div>
+                  <label
+                    style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display: block;">URL</label>
+                  <input type="url" class="link-input" id="link-url-input" placeholder="https://example.com"
+                    autocomplete="off" />
+                </div>
+                <div>
+                  <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display: block;">Title
+                    (optional)</label>
+                  <input type="text" class="link-input" id="link-title-input" placeholder="Custom title..."
+                    autocomplete="off" />
+                </div>
+                <div>
+                  <label
+                    style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display: block;">Description
+                    (optional)</label>
+                  <input type="text" class="link-input" id="link-desc-input" placeholder="Brief description..."
+                    autocomplete="off" />
+                </div>
+                <div class="link-preview" id="link-preview">
+                  <div class="link-preview-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"></path>
+                      <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"></path>
+                    </svg>
+                  </div>
+                  <div class="link-preview-info">
+                    <div class="link-preview-domain" id="link-preview-domain">example.com</div>
+                    <div class="link-preview-url" id="link-preview-url">https://example.com</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary modal-cancel">Cancel</button>
+              <button class="btn-primary" id="btn-confirm-add-link">Add Link</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Color Picker Modal for Moodboard -->
+        <div id="modal-add-color" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box modal-small">
+            <div class="modal-header">
+              <h2>Add Color Swatch</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <div class="color-input-panel">
+                <input type="color" id="color-picker-input" value="#7c6af7" />
+                <input type="text" id="color-hex-input" value="#7C6AF7" maxlength="7" />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary modal-cancel">Cancel</button>
+              <button class="btn-primary" id="btn-confirm-add-color">Add Color</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete Moodboard Modal -->
+        <div id="modal-delete-moodboard" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box modal-small">
+            <div class="modal-header">
+              <h2>Delete Moodboard?</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to delete <strong id="delete-moodboard-name"></strong>?</p>
+              <p class="warning-text">All items on this moodboard will be permanently deleted.</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary modal-cancel">Cancel</button>
+              <button class="btn-danger" id="btn-confirm-delete-moodboard">Delete Moodboard</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RELATIONSHIPS VIEW (with multiple maps) -->
+        <div id="view-relationships" class="view hidden">
+
+          <!-- Empty state (no characters) -->
+          <div id="relationships-empty" class="relationships-empty">
+            <div class="relationships-empty-icon">
+              <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+            </div>
+            <h2>No characters to map yet</h2>
+            <p>Create characters in the Characters section, then come back here to visualize their relationships</p>
+          </div>
+
+          <!-- Active view -->
+          <div id="relationships-active" class="hidden"
+            style="display:flex; flex-direction:column; height:100%; overflow: hidden;">
+
+            <div class="relationships-toolbar">
+              <!-- Map picker -->
+              <div class="rel-map-selector">
+                <select class="rel-map-select" id="rel-map-select"></select>
+                <button class="rel-map-btn-small" id="btn-new-rel-map" data-tooltip="New relationship map">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  New Map
+                </button>
+                <button class="rel-map-btn-small" id="btn-edit-rel-map"
+                  data-tooltip="Edit map (add/remove characters, rename)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  Edit Characters
+                </button>
+                <button class="rel-map-btn-small" id="btn-delete-rel-map" data-tooltip="Delete current map"
+                  style="color: var(--accent-danger);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="relationships-title-area">
+                <h2 id="rel-map-title">Relationship Map</h2>
+                <p id="rel-node-count">0 characters, 0 connections</p>
+              </div>
+
+              <div class="rel-toolbar-group">
+                <button class="rel-toolbar-btn" id="btn-rel-zoom-out" data-tooltip="Zoom Out">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                  </svg>
+                </button>
+                <span class="rel-zoom-display" id="rel-zoom-display">100%</span>
+                <button class="rel-toolbar-btn" id="btn-rel-zoom-in" data-tooltip="Zoom In">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="11" y1="8" x2="11" y2="14"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                  </svg>
+                </button>
+                <button class="rel-toolbar-btn" id="btn-rel-reset-view" data-tooltip="Reset View">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"></polyline>
+                    <path d="M3.51 15a9 9 0 102.13-9.36L1 10"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="rel-toolbar-group">
+                <button class="rel-toolbar-btn" id="btn-auto-layout" data-tooltip="Auto-arrange characters in a circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <circle cx="12" cy="12" r="4"></circle>
+                  </svg>
+                  Auto-Layout
+                </button>
+              </div>
+            </div>
+
+            <div class="rel-canvas-container" id="rel-canvas-container">
+              <div class="rel-canvas" id="rel-canvas">
+                <svg class="rel-connections-svg" id="rel-connections-svg"></svg>
+              </div>
+
+              <div class="rel-connecting-banner" id="rel-connecting-banner">
+                <span>Click another character to create a connection</span>
+                <button class="rel-connecting-cancel" id="btn-cancel-connecting">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create/Edit Connection Modal (with intensity + custom color + description) -->
+        <div id="modal-connection" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box modal-small">
+            <div class="modal-header">
+              <h2 id="connection-modal-title">Create Connection</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 4px;">
+                <strong id="connection-from-name"></strong> → <strong id="connection-to-name"></strong>
+              </p>
+
+              <div class="form-group">
+                <label>Relationship Type</label>
+                <div class="rel-type-selector" id="rel-type-selector">
+                  <button class="rel-type-option" data-type="love">
+                    <span class="rel-type-swatch love"></span> Love / Romance
+                  </button>
+                  <button class="rel-type-option" data-type="friend">
+                    <span class="rel-type-swatch friend"></span> Friend / Ally
+                  </button>
+                  <button class="rel-type-option" data-type="family">
+                    <span class="rel-type-swatch family"></span> Family
+                  </button>
+                  <button class="rel-type-option" data-type="enemy">
+                    <span class="rel-type-swatch enemy"></span> Enemy
+                  </button>
+                  <button class="rel-type-option" data-type="mentor">
+                    <span class="rel-type-swatch mentor"></span> Mentor / Student
+                  </button>
+                  <button class="rel-type-option" data-type="rival">
+                    <span class="rel-type-swatch rival"></span> Rival
+                  </button>
+                  <button class="rel-type-option" data-type="other" style="grid-column: 1 / -1;">
+                    <span class="rel-type-swatch other"></span> Other / Custom
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Custom Label (optional)</label>
+                <input type="text" id="connection-label" placeholder="e.g. Sworn brother, First love..."
+                  maxlength="40" />
+              </div>
+
+              <!-- Custom color (for "Other" type) -->
+              <div class="rel-color-section" id="rel-color-section" style="display: none;">
+                <label class="rel-color-section-label">Custom Color</label>
+                <div class="rel-color-input-row">
+                  <input type="color" id="rel-custom-color-picker" value="#7c6af7" />
+                  <input type="text" id="rel-custom-color-hex" value="#7C6AF7" maxlength="7" />
+                </div>
+              </div>
+
+              <!-- Direction picker -->
+              <div class="rel-intensity-section">
+                <label class="rel-color-section-label">Direction / Arrow</label>
+                <p style="font-size: 10px; color: var(--text-muted); margin: 4px 0 8px 0;">
+                  Add arrows to show one-sided feelings (e.g. unrequited love)
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <button class="rel-direction-option selected" data-direction="none">
+                    <svg width="24" height="14" viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round">
+                      <line x1="2" y1="7" x2="22" y2="7"></line>
+                    </svg>
+                    <span class="rel-direction-label">Mutual (no arrows)</span>
+                  </button>
+                  <button class="rel-direction-option" data-direction="from-to">
+                    <svg width="24" height="14" viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="2" y1="7" x2="18" y2="7"></line>
+                      <polyline points="15 3 22 7 15 11"></polyline>
+                    </svg>
+                    <span class="rel-direction-label">A → B</span>
+                  </button>
+                  <button class="rel-direction-option" data-direction="to-from">
+                    <svg width="24" height="14" viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="6" y1="7" x2="22" y2="7"></line>
+                      <polyline points="9 3 2 7 9 11"></polyline>
+                    </svg>
+                    <span class="rel-direction-label">B → A</span>
+                  </button>
+                  <button class="rel-direction-option" data-direction="both">
+                    <svg width="24" height="14" viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="6" y1="7" x2="18" y2="7"></line>
+                      <polyline points="9 3 2 7 9 11"></polyline>
+                      <polyline points="15 3 22 7 15 11"></polyline>
+                    </svg>
+                    <span class="rel-direction-label">Both ways ↔</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Intensity slider -->
+              <div class="rel-intensity-section">
+                <label class="rel-color-section-label">
+                  Intensity
+                  <span class="rel-intensity-value" id="rel-intensity-display">5</span>
+                </label>
+                <input type="range" class="rel-intensity-slider" id="rel-intensity-slider" min="1" max="10" value="5" />
+                <div class="rel-intensity-labels">
+                  <span>Weak</span>
+                  <span>Strong</span>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div class="form-group" style="margin-top: 12px;">
+                <label>Description (optional)</label>
+                <textarea class="rel-description-textarea" id="rel-description"
+                  placeholder="Describe this relationship in detail..."></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-danger" id="btn-delete-connection" style="margin-right: auto;">Delete</button>
+              <button class="btn-secondary modal-cancel">Cancel</button>
+              <button class="btn-primary" id="btn-save-connection">Save Connection</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- New/Edit Relationship Map Modal -->
+        <div id="modal-rel-map-editor" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box">
+            <div class="modal-header">
+              <h2 id="rel-map-editor-title">New Relationship Map</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="rel-map-name-input">Map Name</label>
+                <input type="text" id="rel-map-name-input" placeholder="e.g. Main Cast, Villain Team, Family Tree..."
+                  maxlength="50" />
+              </div>
+
+              <div class="form-group">
+                <label>Characters in this Map</label>
+                <p style="color: var(--text-muted); font-size: 11px; margin-bottom: 8px;">
+                  Select which characters should appear in this map. Only these characters and their connections will be
+                  shown.
+                </p>
+                <div class="character-selection-grid" id="rel-map-char-selector"></div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary modal-cancel">Cancel</button>
+              <button class="btn-primary" id="btn-save-rel-map">Save Map</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete Relationship Map Modal -->
+        <div id="modal-delete-rel-map" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box modal-small">
+            <div class="modal-header">
+              <h2>Delete Map?</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to delete this map?</p>
+              <p class="warning-text">The connections themselves will remain, but this specific map view will be lost.
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary modal-cancel">Cancel</button>
+              <button class="btn-danger" id="btn-confirm-delete-rel-map">Delete Map</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- OUTLINER VIEW -->
+        <div id="view-outliner" class="view hidden">
+
+          <!-- Empty state -->
+          <div id="outliner-empty" class="outliner-empty">
+            <div class="outliner-empty-icon">
+              <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+              </svg>
+            </div>
+            <h2>No outlines yet</h2>
+            <p>Plan your story with proven story structures like Three-Act, Hero's Journey, Save the Cat, and more. Or
+              start from scratch.</p>
+            <button class="btn-primary" id="btn-new-outline-empty">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Create First Outline
+            </button>
+          </div>
+
+          <!-- Active view -->
+          <div id="outliner-active" class="hidden"
+            style="display:flex; flex-direction:column; height:100%; overflow: hidden;">
+
+            <div class="outliner-toolbar">
+              <input type="text" class="outliner-title-input" id="outliner-title-input" placeholder="Outline name..."
+                autocomplete="off" />
+
+              <button class="outliner-toolbar-btn danger" id="btn-delete-outline">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="outliner-board">
+              <div class="outliner-wrapper" id="outliner-content">
+                <!-- Filled by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template Picker Modal -->
+        <div id="modal-outline-template" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box">
+            <div class="modal-header">
+              <h2>Choose a Story Structure</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 4px;">
+                Pick a proven story structure or start blank. Each template comes with guided placeholders for each
+                story beat.
+              </p>
+              <div class="template-grid" id="template-grid">
+                <!-- Filled by JS -->
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary modal-cancel">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete Section Modal -->
+        <div id="modal-delete-section" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box modal-small">
+            <div class="modal-header">
+              <h2>Delete Section?</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to delete <strong id="delete-section-name"></strong>?</p>
+              <p class="warning-text">All cards in this section will be permanently deleted.</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary modal-cancel">Cancel</button>
+              <button class="btn-danger" id="btn-confirm-delete-section">Delete Section</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete Outline Modal -->
+        <div id="modal-delete-outline" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box modal-small">
+            <div class="modal-header">
+              <h2>Delete Outline?</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to delete <strong id="delete-outline-name"></strong>?</p>
+              <p class="warning-text">All cards on this outline will be permanently deleted.</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary modal-cancel">Cancel</button>
+              <button class="btn-danger" id="btn-confirm-delete-outline">Delete Outline</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANALYTICS VIEW -->
+        <div id="view-analytics" class="view hidden">
+          <div class="analytics-container">
+
+            <div class="analytics-header">
+              <div>
+                <h1>Writing Analytics</h1>
+                <p id="analytics-subtitle">Track your progress and stay motivated</p>
+              </div>
+              <button class="analytics-goal-btn" id="btn-set-daily-goal">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="12" r="6"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+                Set Daily Goal
+              </button>
+            </div>
+
+            <!-- Live session + key stats -->
+            <div class="stats-grid" id="stats-grid">
+              <!-- Filled by JS -->
+            </div>
+
+            <!-- Daily Goal -->
+            <div class="analytics-section" id="daily-goal-section">
+              <div class="analytics-section-header">
+                <div>
+                  <div class="analytics-section-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <circle cx="12" cy="12" r="6"></circle>
+                      <circle cx="12" cy="12" r="2"></circle>
+                    </svg>
+                    Today's Goal
+                  </div>
+                  <div class="analytics-section-subtitle" id="daily-goal-subtitle">Keep the momentum going</div>
+                </div>
+              </div>
+              <div class="daily-goal-card" id="daily-goal-card">
+                <!-- Filled by JS -->
+              </div>
+            </div>
+
+            <!-- Daily Chart -->
+            <div class="analytics-section">
+              <div class="analytics-section-header">
+                <div>
+                  <div class="analytics-section-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="20" x2="18" y2="10"></line>
+                      <line x1="12" y1="20" x2="12" y2="4"></line>
+                      <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    Last 30 Days
+                  </div>
+                  <div class="analytics-section-subtitle">Words written each day</div>
+                </div>
+              </div>
+              <div class="chart-container" id="daily-chart">
+                <!-- Filled by JS -->
+              </div>
+            </div>
+
+            <!-- Calendar Heatmap -->
+            <div class="analytics-section">
+              <div class="analytics-section-header">
+                <div>
+                  <div class="analytics-section-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    Writing Calendar
+                  </div>
+                  <div class="analytics-section-subtitle">Your writing consistency this year</div>
+                </div>
+              </div>
+              <div class="heatmap-container">
+                <div class="heatmap-grid" id="heatmap-grid">
+                  <!-- Filled by JS -->
+                </div>
+              </div>
+              <div class="heatmap-legend">
+                <span>Less</span>
+                <div class="heatmap-legend-scale">
+                  <div class="heatmap-cell level-0"></div>
+                  <div class="heatmap-cell level-1"></div>
+                  <div class="heatmap-cell level-2"></div>
+                  <div class="heatmap-cell level-3"></div>
+                  <div class="heatmap-cell level-4"></div>
+                </div>
+                <span>More</span>
+              </div>
+            </div>
+
+            <!-- Chapter Progress -->
+            <div class="analytics-section">
+              <div class="analytics-section-header">
+                <div>
+                  <div class="analytics-section-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+                    </svg>
+                    Chapter Progress
+                  </div>
+                  <div class="analytics-section-subtitle">Words per chapter</div>
+                </div>
+              </div>
+              <div class="chapters-progress-list" id="chapters-progress-list">
+                <!-- Filled by JS -->
+              </div>
+            </div>
+
+            <!-- Milestones -->
+            <div class="analytics-section">
+              <div class="analytics-section-header">
+                <div>
+                  <div class="analytics-section-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="8" r="7"></circle>
+                      <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                    </svg>
+                    Milestones
+                  </div>
+                  <div class="analytics-section-subtitle">Unlock as you write</div>
+                </div>
+              </div>
+              <div class="milestones-grid" id="milestones-grid">
+                <!-- Filled by JS -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- BOOK DESIGN VIEW -->
+        <div id="view-bookdesign" class="view hidden">
+          <div class="bookdesign-container">
+
+            <!-- LEFT: Controls -->
+            <div class="bookdesign-controls">
+
+              <div class="bookdesign-controls-header">
+                <h2>Book Design & Export</h2>
+                <p>Design and export your novel</p>
+              </div>
+
+              <div class="bookdesign-controls-body">
+
+                <!-- Export format -->
+                <div class="bd-section">
+                  <div class="bd-section-title">Export Format</div>
+                  <div class="bd-format-buttons">
+                    <button class="bd-format-btn selected" data-format="pdf">📄 PDF</button>
+                    <button class="bd-format-btn" data-format="docx">📝 DOCX</button>
+                    <button class="bd-format-btn" data-format="html">🌐 HTML</button>
+                    <button class="bd-format-btn" data-format="txt">📃 TXT</button>
+                    <button class="bd-format-btn" data-format="md">Ⓜ MD</button>
+                  </div>
+                </div>
+
+                <!-- Font -->
+                <div class="bd-section" id="bd-design-section">
+                  <div class="bd-section-title">Design</div>
+
+                  <div class="bd-field">
+                    <label>Font Family</label>
+                    <select id="bd-font">
+                      <option value="Georgia, serif" selected>Georgia (classic)</option>
+                      <option value="'Times New Roman', serif">Times New Roman</option>
+                      <option value="'Garamond', serif">Garamond</option>
+                      <option value="'Palatino Linotype', serif">Palatino</option>
+                      <option value="'Helvetica', sans-serif">Helvetica</option>
+                      <option value="'Courier New', monospace">Courier</option>
+                    </select>
+                  </div>
+
+                  <div class="bd-field">
+                    <label>Font Size: <span id="bd-fontsize-val">14px</span></label>
+                    <input type="range" id="bd-fontsize" min="10" max="22" value="14" />
+                  </div>
+
+                  <div class="bd-field">
+                    <label>Line Spacing: <span id="bd-linespacing-val">1.8</span></label>
+                    <input type="range" id="bd-linespacing" min="12" max="30" value="18" step="1" />
+                  </div>
+
+                  <div class="bd-field">
+                    <label>Paragraph Indent</label>
+                    <select id="bd-indent">
+                      <option value="0">No indent</option>
+                      <option value="1.5em" selected>Standard (1.5em)</option>
+                      <option value="2em">Large (2em)</option>
+                      <option value="3em">Extra large (3em)</option>
+                    </select>
+                  </div>
+
+                  <div class="bd-field">
+                    <label>Text Alignment</label>
+                    <select id="bd-alignment">
+                      <option value="left">Left aligned</option>
+                      <option value="justify" selected>Justified</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Structure -->
+                <div class="bd-section">
+                  <div class="bd-section-title">Structure</div>
+
+                  <label class="bd-checkbox">
+                    <input type="checkbox" id="bd-title-page" checked />
+                    <span>Title page</span>
+                  </label>
+
+                  <label class="bd-checkbox">
+                    <input type="checkbox" id="bd-toc" checked />
+                    <span>Table of contents</span>
+                  </label>
+
+                  <label class="bd-checkbox">
+                    <input type="checkbox" id="bd-chapter-numbers" checked />
+                    <span>Chapter numbers</span>
+                  </label>
+
+                  <label class="bd-checkbox">
+                    <input type="checkbox" id="bd-page-numbers" checked />
+                    <span>Page numbers</span>
+                  </label>
+                </div>
+
+                <!-- Chapters -->
+                <div class="bd-section">
+                  <div class="bd-section-title">Chapters</div>
+                  <div class="bd-chapters-toolbar">
+                    <button id="bd-select-all">All</button>
+                    <button id="bd-select-none">None</button>
+                    <span class="bd-chapters-count" id="bd-chapters-count">0 selected</span>
+                  </div>
+                  <div class="bd-chapters-list" id="bd-chapters-list"></div>
+                </div>
+
+                <!-- Export button -->
+                <div class="bd-section">
+                  <button class="bd-export-btn" id="bd-export-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+                      <polyline points="7 10 12 15 17 10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Export Now
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- RIGHT: Preview -->
+            <div class="bookdesign-preview">
+              <div class="bookdesign-preview-header">
+                <span>Preview</span>
+                <span class="bd-preview-stats" id="bd-preview-stats">—</span>
+              </div>
+              <div class="bookdesign-preview-scroll" id="bd-preview-scroll">
+                <div class="bd-book-page" id="bd-preview-content">
+                  <!-- Filled by JS -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Sprint Setup Modal -->
+        <div id="modal-sprint-setup" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box">
+            <div class="modal-header">
+              <h2>🏃 Start Writing Sprint</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+
+              <!-- Type Tabs -->
+              <div class="sprint-type-tabs">
+                <button class="sprint-type-tab active" data-type="single">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  Single Sprint
+                </button>
+                <button class="sprint-type-tab" data-type="continuous">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"></polyline>
+                    <polyline points="23 20 23 14 17 14"></polyline>
+                    <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"></path>
+                  </svg>
+                  Continuous
+                </button>
+              </div>
+
+              <!-- SINGLE SPRINT MODE -->
+              <div class="sprint-mode-content active" id="single-mode">
+                <div class="form-group">
+                  <label>Sprint Duration</label>
+                  <div class="sprint-duration-grid">
+                    <button class="sprint-duration-btn" data-minutes="5">5<small>min</small></button>
+                    <button class="sprint-duration-btn" data-minutes="10">10<small>min</small></button>
+                    <button class="sprint-duration-btn selected" data-minutes="15">15<small>min</small></button>
+                    <button class="sprint-duration-btn" data-minutes="20">20<small>min</small></button>
+                    <button class="sprint-duration-btn" data-minutes="25">25<small>min</small></button>
+                    <button class="sprint-duration-btn" data-minutes="30">30<small>min</small></button>
+                    <button class="sprint-duration-btn" data-minutes="45">45<small>min</small></button>
+                    <button class="sprint-duration-btn" data-minutes="60">60<small>min</small></button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="sprint-word-goal">Word Goal (optional)</label>
+                  <input type="number" id="sprint-word-goal" placeholder="e.g. 200" min="0" max="10000" />
+                </div>
+
+                <div class="sprint-setting-row">
+                  <div>
+                    <div class="sprint-setting-label">Auto break after sprint</div>
+                    <div class="sprint-setting-desc">Take a 5-minute break automatically</div>
+                  </div>
+                  <button class="sprint-setting-toggle on" id="sprint-toggle-break" data-on="true"></button>
+                </div>
+              </div>
+
+              <!-- CONTINUOUS MODE -->
+              <div class="sprint-mode-content" id="continuous-mode">
+                <div class="form-group">
+                  <label>Number of Sprints</label>
+                  <div class="number-stepper">
+                    <button class="stepper-btn" id="stepper-minus">−</button>
+                    <span class="stepper-value" id="sprint-count-value">3</span>
+                    <button class="stepper-btn" id="stepper-plus">+</button>
+                    <span style="font-size: 11px; color: var(--text-muted); margin-left: 8px;">Min 2, Max 10</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Duration Per Sprint</label>
+                  <div class="sprint-mini-duration-grid">
+                    <button class="sprint-mini-duration-btn" data-minutes="5">5<small>min</small></button>
+                    <button class="sprint-mini-duration-btn" data-minutes="10">10<small>min</small></button>
+                    <button class="sprint-mini-duration-btn" data-minutes="15">15<small>min</small></button>
+                    <button class="sprint-mini-duration-btn selected" data-minutes="20">20<small>min</small></button>
+                    <button class="sprint-mini-duration-btn" data-minutes="25">25<small>min</small></button>
+                    <button class="sprint-mini-duration-btn" data-minutes="30">30<small>min</small></button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Break Duration</label>
+                  <div class="break-duration-grid">
+                    <button class="break-duration-btn" data-minutes="1">1<small>min</small></button>
+                    <button class="break-duration-btn" data-minutes="2">2<small>min</small></button>
+                    <button class="break-duration-btn" data-minutes="3">3<small>min</small></button>
+                    <button class="break-duration-btn" data-minutes="4">4<small>min</small></button>
+                    <button class="break-duration-btn selected" data-minutes="5">5<small>min</small></button>
+                    <button class="break-duration-btn" data-minutes="7">7<small>min</small></button>
+                    <button class="break-duration-btn" data-minutes="10">10<small>min</small></button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="sprint-total-goal">Total Word Goal (optional)</label>
+                  <input type="number" id="sprint-total-goal" placeholder="e.g. 500" min="0" max="20000" />
+                  <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                    Will be split evenly across sprints
+                  </p>
+                </div>
+
+                <!-- Live preview -->
+                <div class="sprint-preview-box" id="sprint-preview">
+                  <div class="sprint-preview-box-title">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Preview
+                  </div>
+                  <div id="sprint-preview-content"></div>
+                </div>
+              </div>
+
+              <!-- Universal option -->
+              <div class="sprint-setting-row" style="margin-top: 16px;">
+                <div>
+                  <div class="sprint-setting-label">Play sound when done</div>
+                  <div class="sprint-setting-desc">Gentle beep at end of sprint/break</div>
+                </div>
+                <button class="sprint-setting-toggle on" id="sprint-toggle-sound" data-on="true"></button>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary modal-cancel">Cancel</button>
+              <button class="btn-primary" id="btn-start-sprint">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Start Sprint
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Break Lock Overlay (prevents writing during break) -->
+        <div class="break-lock-overlay" id="break-lock-overlay">
+          <div class="break-lock-content">
+            <div class="break-lock-icon">☕</div>
+            <div class="break-lock-title">Break Time</div>
+            <div class="break-lock-message" id="break-lock-message">
+              Rest your mind. The editor will unlock when your break is over.
+            </div>
+            <div class="break-lock-timer" id="break-lock-timer">5:00</div>
+            <div class="break-lock-progress" id="break-lock-progress" style="display:none;">
+              Break 1 of 2 • Next: Sprint 2 of 3
+            </div>
+            <br>
+            <button class="break-lock-skip" id="break-lock-skip">Skip Break</button>
+          </div>
+        </div>
+
+        <!-- Sprint Complete Modal -->
+        <div id="modal-sprint-complete" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box modal-small">
+            <div class="modal-header">
+              <h2>Sprint Complete!</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <div class="sprint-complete">
+                <div class="sprint-complete-icon" id="sprint-complete-icon">🎉</div>
+                <div class="sprint-complete-title" id="sprint-complete-title">Great job!</div>
+                <div class="sprint-complete-subtitle" id="sprint-complete-subtitle">You completed your writing sprint
+                </div>
+
+                <div id="sprint-goal-status-container"></div>
+
+                <div class="sprint-complete-stats">
+                  <div class="sprint-stat">
+                    <div class="sprint-stat-value" id="sprint-result-words">0</div>
+                    <div class="sprint-stat-label">Words</div>
+                  </div>
+                  <div class="sprint-stat">
+                    <div class="sprint-stat-value" id="sprint-result-time">0m</div>
+                    <div class="sprint-stat-label">Duration</div>
+                  </div>
+                  <div class="sprint-stat">
+                    <div class="sprint-stat-value" id="sprint-result-wpm">0</div>
+                    <div class="sprint-stat-label">WPM</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary" id="btn-sprint-done">Done</button>
+              <button class="btn-primary" id="btn-sprint-another">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Another Sprint
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Break Complete Modal -->
+        <div id="modal-break-complete" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box modal-small">
+            <div class="modal-header">
+              <h2>Break's Over!</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+              <div class="sprint-complete">
+                <div class="sprint-complete-icon">☕</div>
+                <div class="sprint-complete-title">Ready to write?</div>
+                <div class="sprint-complete-subtitle">Your break is done. Time to get back to it!</div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary" id="btn-break-done">Just Close</button>
+              <button class="btn-primary" id="btn-start-new-sprint">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Start Next Sprint
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Set Daily Goal Modal -->
+        <div id="modal-daily-goal" class="modal hidden">
+          <div class="modal-overlay"></div>
+          <div class="modal-box">
+            <div class="modal-header">
+              <h2>Analytics Settings</h2>
+              <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+
+              <div class="form-group">
+                <label for="daily-goal-input">Daily Word Goal</label>
+                <p style="color: var(--text-muted); font-size: 11px; margin-bottom: 6px;">
+                  <strong>250-500</strong> = casual • <strong>1000</strong> = serious • <strong>1667</strong> =
+                  NaNoWriMo pace
+                </p>
+                <input type="number" id="daily-goal-input" placeholder="e.g. 500" min="0" max="10000" />
+              </div>
+
+              <div class="form-group">
+                <label>Session Timer Mode</label>
+                <div class="timer-mode-options">
+                  <div class="timer-mode-option" data-mode="writing">
+                    <div class="timer-mode-option-title">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                      </svg>
+                      Only While Writing
+                    </div>
+                    <div class="timer-mode-option-desc">
+                      Timer runs only when you're actively typing. Pauses after 1 minute of inactivity. Best for
+                      accurate WPM tracking.
+                    </div>
+                  </div>
+                  <div class="timer-mode-option" data-mode="project">
+                    <div class="timer-mode-option-title">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      Whole Time Project is Open
+                    </div>
+                    <div class="timer-mode-option-desc">
+                      Timer runs the entire time the project is open (even when not writing). Pauses when app loses
+                      focus (tabbed out).
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button class="btn-secondary modal-cancel">Cancel</button>
+              <button class="btn-primary" id="btn-save-daily-goal">Save Settings</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- MODALS -->
+  <!-- ============================================ -->
+
+  <!-- New Project Modal -->
+  <div id="modal-new-project" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Create New Novel</h2>
+        <button class="modal-close" data-tooltip="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="project-title">Title *</label>
+          <input type="text" id="project-title" placeholder="e.g. The Great Novel" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="project-author">Author</label>
+          <input type="text" id="project-author" placeholder="Your name" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="project-genre">Genre</label>
+          <select id="project-genre">
+            <option value="">Select genre...</option>
+            <option value="fantasy">Fantasy</option>
+            <option value="sci-fi">Science Fiction</option>
+            <option value="romance">Romance</option>
+            <option value="thriller">Thriller</option>
+            <option value="mystery">Mystery</option>
+            <option value="horror">Horror</option>
+            <option value="literary">Literary Fiction</option>
+            <option value="historical">Historical Fiction</option>
+            <option value="ya">Young Adult</option>
+            <option value="childrens">Children's</option>
+            <option value="nonfiction">Non-Fiction</option>
+            <option value="memoir">Memoir</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="project-description">Synopsis</label>
+          <textarea id="project-description" placeholder="A short description of your novel..." rows="4"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="project-word-goal">Word Count Goal</label>
+          <input type="number" id="project-word-goal" placeholder="e.g. 80000" min="0" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-cancel">Cancel</button>
+        <button class="btn-primary" id="btn-create-project">Create Novel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Delete Project Modal -->
+  <div id="modal-confirm-delete" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box modal-small">
+      <div class="modal-header">
+        <h2>Delete Novel?</h2>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="delete-project-name"></strong>?</p>
+        <p class="warning-text">This action cannot be undone. All chapters, characters, notes, and other data will be
+          permanently deleted.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-cancel">Cancel</button>
+        <button class="btn-danger" id="btn-confirm-delete">Delete Forever</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Chapter Modal -->
+  <div id="modal-delete-chapter" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box modal-small">
+      <div class="modal-header">
+        <h2>Delete Chapter?</h2>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="delete-chapter-name"></strong>?</p>
+        <p class="warning-text">This will permanently delete the chapter and all its content.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-cancel">Cancel</button>
+        <button class="btn-danger" id="btn-confirm-delete-chapter">Delete Chapter</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Character Modal -->
+  <div id="modal-delete-character" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box modal-small">
+      <div class="modal-header">
+        <h2>Delete Character?</h2>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="delete-character-name"></strong>?</p>
+        <p class="warning-text">This action cannot be undone. All character details will be permanently deleted.
+          Mentions in chapters will remain but become plain text.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-cancel">Cancel</button>
+        <button class="btn-danger" id="btn-confirm-delete-character">Delete Character</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Project Modal -->
+  <div id="modal-edit-project" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Edit Novel Details</h2>
+        <button class="modal-close">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="edit-project-title">Title *</label>
+          <input type="text" id="edit-project-title" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="edit-project-author">Author</label>
+          <input type="text" id="edit-project-author" placeholder="Your name" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="edit-project-genre">Genre</label>
+          <select id="edit-project-genre">
+            <option value="">Select genre...</option>
+            <option value="fantasy">Fantasy</option>
+            <option value="sci-fi">Science Fiction</option>
+            <option value="romance">Romance</option>
+            <option value="thriller">Thriller</option>
+            <option value="mystery">Mystery</option>
+            <option value="horror">Horror</option>
+            <option value="literary">Literary Fiction</option>
+            <option value="historical">Historical Fiction</option>
+            <option value="ya">Young Adult</option>
+            <option value="childrens">Children's</option>
+            <option value="nonfiction">Non-Fiction</option>
+            <option value="memoir">Memoir</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="edit-project-description">Synopsis</label>
+          <textarea id="edit-project-description" placeholder="A short description of your novel..."
+            rows="4"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="edit-project-word-goal">Word Count Goal</label>
+          <input type="number" id="edit-project-word-goal" placeholder="e.g. 80000" min="0" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-cancel">Cancel</button>
+        <button class="btn-primary" id="btn-confirm-edit">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Backup Restore Modal -->
+  <div id="modal-backups" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Restore from Backup</h2>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">
+          WriteFlow keeps the last 5 versions of each project. Restore any version if you need to undo changes.
+        </p>
+        <p class="unsaved-warning">
+          ⚠ Restoring will replace your current version. Your current version will be backed up automatically.
+        </p>
+        <div class="backup-list" id="backup-list">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-cancel">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spell Check Modal -->
+  <div id="modal-spellcheck" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Spell Check Settings</h2>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Status toggle -->
+        <div class="spellcheck-status-row">
+          <div class="spellcheck-status-left">
+            <div class="spellcheck-status-icon" id="spellcheck-status-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div class="spellcheck-status-info">
+              <h3 id="spellcheck-status-title">Spell Check is ON</h3>
+              <p id="spellcheck-status-desc">Misspelled words will be underlined in red</p>
+            </div>
+          </div>
+          <button class="sprint-setting-toggle on" id="spellcheck-toggle" data-on="true"></button>
+        </div>
+
+        <!-- Language selector -->
+        <div class="form-group">
+          <label>Language</label>
+          <p style="color: var(--text-muted); font-size: 11px; margin-bottom: 8px;">
+            Select the language for spell checking. You can select multiple languages.
+          </p>
+          <div class="spellcheck-lang-grid" id="spellcheck-lang-grid">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <!-- Custom dictionary -->
+        <div class="form-group">
+          <label>Personal Dictionary</label>
+          <p style="color: var(--text-muted); font-size: 11px; margin-bottom: 8px;">
+            Words you've added to your personal dictionary. These won't be marked as misspelled.
+          </p>
+          <div class="custom-words-list" id="custom-words-list">
+            <div class="custom-words-empty">No custom words yet. Right-click a word in the editor to add it.</div>
+          </div>
+        </div>
+
+        <!-- How to use -->
+        <div class="form-group">
+          <label>How to Use</label>
+          <p style="color: var(--text-secondary); font-size: 12px; line-height: 1.6;">
+            • Misspelled words will be <strong>underlined in red</strong> as you type<br>
+            • <strong>Right-click</strong> a misspelled word to see suggestions<br>
+            • Click "Add to dictionary" to save a word permanently<br>
+            • Change language above to check text in other languages
+          </p>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-cancel">Close</button>
+        <button class="btn-primary" id="btn-save-spellcheck">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Storage Info Modal -->
+  <div id="modal-storage" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Storage & Data</h2>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-secondary); font-size: 13px;">
+          Your writing is safely stored on your computer.
+        </p>
+        <div class="storage-info" id="storage-info-content">
+          <!-- Filled by JS -->
+        </div>
+        <p style="color: var(--text-secondary); font-size: 12px; margin-top: 16px; margin-bottom: 6px;">
+          Data location (click to open):
+        </p>
+        <div class="storage-path" id="storage-path" data-tooltip="Click to open folder">
+          Loading...
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btn-import-project">Import Project</button>
+        <button class="btn-secondary" id="btn-open-spellcheck">Spell Check</button>
+        <button class="btn-primary" id="btn-close-storage">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen exit button -->
+  <button id="fullscreen-exit-btn" data-tooltip="Exit Fullscreen (Esc)">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+
+  <!-- Zen mode indicator -->
+  <div class="zen-mode-indicator" id="zen-indicator">
+    <span>Zen Mode</span>
+    <span style="opacity: 0.5;">•</span>
+    <span>Press Esc to exit</span>
+  </div>
+
+  <!-- Prose Analysis Panel -->
+  <div class="analysis-panel" id="analysis-panel">
+    <div class="analysis-panel-header">
+      <div class="analysis-panel-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9"></path>
+          <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+        </svg>
+        Prose Analysis
+      </div>
+      <button class="analysis-panel-close" id="analysis-panel-close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="analysis-panel-body">
+
+      <!-- Readability score -->
+      <div class="readability-card">
+        <div class="readability-header">
+          <div class="readability-title">Readability</div>
+          <div class="readability-score" id="readability-score">—</div>
+        </div>
+        <div class="readability-label" id="readability-label">Analyzing...</div>
+        <div class="readability-bar">
+          <div class="readability-bar-fill" id="readability-fill" style="width: 0%"></div>
+        </div>
+        <div class="readability-desc" id="readability-desc">Flesch Reading Ease score</div>
+        <div class="readability-grade" id="readability-grade" style="display:none;"></div>
+      </div>
+
+      <!-- Basic stats -->
+      <div class="analysis-section-header">Statistics</div>
+      <div class="analysis-stats" id="analysis-stats">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- Category toggles -->
+      <div class="analysis-section-header">Highlight Categories</div>
+      <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">
+        Toggle categories on/off to highlight them in your text
+      </p>
+      <div class="analysis-categories" id="analysis-categories">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- Repetition details (only shown when repetition is enabled) -->
+      <div id="repetition-details" style="display: none;">
+        <div class="analysis-section-header">Repeated Words</div>
+        <div class="repetition-list" id="repetition-list">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Versions Panel (slides in from right) -->
+  <div class="versions-panel" id="versions-panel">
+    <div class="versions-panel-header">
+      <div class="versions-panel-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="18" r="3"></circle>
+          <circle cx="6" cy="6" r="3"></circle>
+          <path d="M13 6h3a2 2 0 0 1 2 2v7"></path>
+          <line x1="6" y1="9" x2="6" y2="21"></line>
+        </svg>
+        Scene Versions
+      </div>
+      <button class="versions-panel-close" id="versions-panel-close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="versions-panel-info">
+      Try different versions of this scene without losing anything. Create as many variations as you want, then keep
+      the
+      one you love.
+    </div>
+
+    <div class="versions-panel-actions">
+      <button class="btn-new-version" id="btn-new-version">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        New Version
+      </button>
+      <button class="btn-compare" id="btn-compare-versions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <line x1="9" y1="18" x2="15" y2="18"></line>
+          <line x1="12" y1="15" x2="12" y2="21"></line>
+          <path d="M4 3h6v6H4z"></path>
+          <path d="M14 3h6v6h-6z"></path>
+        </svg>
+        Compare
+      </button>
+    </div>
+
+    <div class="versions-list" id="versions-list">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+  <!-- New Version Modal -->
+  <div id="modal-new-version" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box modal-small">
+      <div class="modal-header">
+        <h2>Create New Version</h2>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 12px;">
+          Choose how to start your new version:
+        </p>
+
+        <div class="form-group">
+          <label for="new-version-name">Version Name</label>
+          <input type="text" id="new-version-name" placeholder="e.g. Angry version, Cold approach, Draft 2..."
+            maxlength="50" />
+        </div>
+
+        <div class="form-group">
+          <label style="margin-bottom: 8px;">Start From</label>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label
+              style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg-card); border: 2px solid var(--accent-primary); border-radius: var(--radius-sm); cursor: pointer;">
+              <input type="radio" name="version-source" value="copy" checked style="margin: 0;" />
+              <div>
+                <div style="font-size: 13px; color: var(--text-primary); font-weight: 500;">Copy current version
+                </div>
+                <div style="font-size: 11px; color: var(--text-muted);">Start with the same content, then modify it
+                </div>
+              </div>
+            </label>
+            <label
+              style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer;">
+              <input type="radio" name="version-source" value="blank" style="margin: 0;" />
+              <div>
+                <div style="font-size: 13px; color: var(--text-primary); font-weight: 500;">Start blank</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Fresh start with an empty page</div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-cancel">Cancel</button>
+        <button class="btn-primary" id="btn-create-version">Create Version</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Version Modal -->
+  <div id="modal-delete-version" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box modal-small">
+      <div class="modal-header">
+        <h2>Delete Version?</h2>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="delete-version-name"></strong>?</p>
+        <p class="warning-text">This version and all its content will be permanently deleted.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-cancel">Cancel</button>
+        <button class="btn-danger" id="btn-confirm-delete-version">Delete Version</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compare Versions Modal -->
+  <div id="modal-compare" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box modal-compare">
+      <div class="modal-header">
+        <h2>Compare Versions</h2>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 16px;">
+
+        <!-- Compare controls bar -->
+        <div class="compare-controls">
+          <button class="compare-control-btn" id="btn-compare-top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+            Jump to Top
+          </button>
+          <button class="compare-control-btn" id="btn-compare-bottom">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+            Jump to Bottom
+          </button>
+          <div class="compare-control-toggle">
+            <input type="checkbox" class="compare-control-checkbox" id="compare-sync-scroll" checked />
+            <label for="compare-sync-scroll" class="compare-control-toggle-label">Sync scrolling</label>
+          </div>
+        </div>
+
+        <div class="compare-container">
+
+          <div class="compare-column">
+            <div class="compare-column-header">
+              <select class="compare-column-select" id="compare-left-select"></select>
+              <span class="compare-column-badge" id="compare-left-badge">Version A</span>
+            </div>
+            <div class="compare-column-content" id="compare-left-content"></div>
+            <div class="compare-column-stats" id="compare-left-stats"></div>
+          </div>
+
+          <div class="compare-column">
+            <div class="compare-column-header">
+              <select class="compare-column-select" id="compare-right-select"></select>
+              <span class="compare-column-badge" id="compare-right-badge">Version B</span>
+            </div>
+            <div class="compare-column-content" id="compare-right-content"></div>
+            <div class="compare-column-stats" id="compare-right-stats"></div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" id="btn-close-compare">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Modal -->
+  <div id="modal-export" class="modal export-modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>📖 Export Book</h2>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+
+        <div class="export-container">
+
+          <!-- LEFT: Settings -->
+          <div class="export-settings">
+
+            <!-- Format -->
+            <div class="export-section">
+              <div class="export-section-title">Format</div>
+              <div class="export-format-grid">
+                <button class="export-format-btn selected" data-format="pdf">
+                  <div class="export-format-icon">📄</div>
+                  <div class="export-format-name">PDF</div>
+                  <div class="export-format-desc">Book-formatted, print-ready</div>
+                </button>
+                <button class="export-format-btn" data-format="docx">
+                  <div class="export-format-icon">📝</div>
+                  <div class="export-format-name">Word (DOCX)</div>
+                  <div class="export-format-desc">For Microsoft Word</div>
+                </button>
+                <button class="export-format-btn" data-format="txt">
+                  <div class="export-format-icon">📃</div>
+                  <div class="export-format-name">Text (TXT)</div>
+                  <div class="export-format-desc">Plain text, no formatting</div>
+                </button>
+                <button class="export-format-btn" data-format="md">
+                  <div class="export-format-icon">Ⓜ</div>
+                  <div class="export-format-name">Markdown</div>
+                  <div class="export-format-desc">For GitHub, docs</div>
+                </button>
+                <button class="export-format-btn" data-format="html" style="grid-column: 1/-1;">
+                  <div class="export-format-icon">🌐</div>
+                  <div class="export-format-name">HTML</div>
+                  <div class="export-format-desc">For web publishing</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Book design (PDF/DOCX only) -->
+            <div class="export-section" id="section-design">
+              <div class="export-section-title">Book Design</div>
+
+              <div class="export-setting">
+                <label class="export-setting-label">Page Size</label>
+                <select class="export-select" id="export-pagesize">
+                  <option value="a4">A4 (210 × 297 mm)</option>
+                  <option value="letter" selected>US Letter (8.5 × 11 in)</option>
+                  <option value="5x8">5 × 8 in (Trade paperback)</option>
+                  <option value="6x9">6 × 9 in (Novel size)</option>
+                </select>
+              </div>
+
+              <div class="export-setting">
+                <label class="export-setting-label">Font</label>
+                <select class="export-select" id="export-font">
+                  <option value="georgia" selected>Georgia (classic)</option>
+                  <option value="times">Times New Roman</option>
+                  <option value="garamond">Garamond</option>
+                  <option value="helvetica">Helvetica (sans-serif)</option>
+                  <option value="courier">Courier (typewriter)</option>
+                </select>
+              </div>
+
+              <div class="export-setting">
+                <label class="export-setting-label">Font Size</label>
+                <div class="export-slider-row">
+                  <input type="range" class="export-slider" id="export-fontsize" min="9" max="16" value="12" step="1" />
+                  <span class="export-slider-value" id="export-fontsize-value">12pt</span>
+                </div>
+              </div>
+
+              <div class="export-setting">
+                <label class="export-setting-label">Line Spacing</label>
+                <div class="export-slider-row">
+                  <input type="range" class="export-slider" id="export-linespacing" min="10" max="25" value="15"
+                    step="1" />
+                  <span class="export-slider-value" id="export-linespacing-value">1.5×</span>
+                </div>
+              </div>
+
+              <div class="export-setting">
+                <label class="export-setting-label">Margins</label>
+                <select class="export-select" id="export-margins">
+                  <option value="narrow">Narrow (0.5 in)</option>
+                  <option value="normal" selected>Normal (1 in)</option>
+                  <option value="wide">Wide (1.5 in)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Book structure -->
+            <div class="export-section">
+              <div class="export-section-title">Structure</div>
+
+              <div class="export-checkbox-row">
+                <input type="checkbox" class="export-checkbox" id="export-title-page" checked />
+                <label for="export-title-page" class="export-checkbox-label">Include title page</label>
+              </div>
+
+              <div class="export-checkbox-row">
+                <input type="checkbox" class="export-checkbox" id="export-toc" checked />
+                <label for="export-toc" class="export-checkbox-label">Include table of contents</label>
+              </div>
+
+              <div class="export-checkbox-row">
+                <input type="checkbox" class="export-checkbox" id="export-chapter-numbers" checked />
+                <label for="export-chapter-numbers" class="export-checkbox-label">Include chapter numbers</label>
+              </div>
+
+              <div class="export-checkbox-row">
+                <input type="checkbox" class="export-checkbox" id="export-page-numbers" checked />
+                <label for="export-page-numbers" class="export-checkbox-label">Include page numbers</label>
+              </div>
+            </div>
+
+            <!-- Chapters -->
+            <div class="export-section">
+              <div class="export-section-title">Chapters</div>
+              <div class="export-chapters-toolbar">
+                <button id="export-select-all">Select All</button>
+                <button id="export-select-none">Select None</button>
+              </div>
+              <div class="export-chapters-list" id="export-chapters-list">
+                <!-- Filled by JS -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: Preview -->
+          <div class="export-preview-panel">
+            <div class="export-preview-header">
+              <span>Preview</span>
+              <span class="export-preview-stats" id="export-preview-stats">—</span>
+            </div>
+            <div class="export-preview-content" id="export-preview-content">
+              <!-- Filled by JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-cancel">Cancel</button>
+        <button class="btn-primary" id="btn-do-export">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Export Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Find & Replace Bar -->
+  <div class="find-replace-bar" id="find-replace-bar">
+    <div class="find-replace-row">
+      <input type="text" class="find-replace-input" id="fr-find-input" placeholder="Find..." autocomplete="off" />
+      <span class="fr-status" id="fr-status">0/0</span>
+      <button class="fr-option-btn" id="fr-case-btn" title="Match case">Aa</button>
+      <button class="fr-btn" id="fr-prev-btn" title="Previous (Shift+Enter)">▲</button>
+      <button class="fr-btn" id="fr-next-btn" title="Next (Enter)">▼</button>
+      <button class="fr-btn" id="fr-toggle-replace" title="Toggle Replace (Ctrl+H)">Replace</button>
+      <button class="fr-close" id="fr-close-btn" title="Close (Esc)">✕</button>
+    </div>
+    <div class="find-replace-row replace-row">
+      <input type="text" class="find-replace-input" id="fr-replace-input" placeholder="Replace with..."
+        autocomplete="off" />
+      <button class="fr-btn" id="fr-replace-one">Replace</button>
+      <button class="fr-btn primary" id="fr-replace-all">All</button>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+
+  <!-- JavaScript -->
+  <script src="js/editor.js"></script>
+  <script src="js/editor-modes.js"></script>
+  <script src="js/characters.js"></script>
+  <script src="js/notes.js"></script>
+  <script src="js/moodboard.js"></script>
+  <script src="js/relationships.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/sprints.js"></script>
+  <script src="js/outliner.js"></script>
+  <script src="js/spellcheck.js"></script>
+  <script src="js/versions.js"></script>
+  <script src="js/analysis.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/bookdesign.js"></script>
+  <script src="js/findreplace.js"></script>
+  <script src="js/polish.js"></script>
+  <script src="js/logo.js"></script>
+  <script src="js/app.js"></script>
+
+
+</body>
+
+</html>

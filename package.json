@@ -1,0 +1,74 @@
+{
+  "name": "writeflow",
+  "version": "1.0.0",
+  "description": "A powerful, distraction-free novel writing desktop application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.writeflow.app",
+    "productName": "WriteFlow",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "src/assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "WriteFlow",
+      "installerIcon": "src/assets/icon.ico",
+      "uninstallerIcon": "src/assets/icon.ico",
+      "installerHeaderIcon": "src/assets/icon.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "src/assets/icon.png",
+      "category": "Office"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "src/assets/icon.png",
+      "category": "public.app-category.productivity"
+    }
+  },
+  "keywords": [
+    "writing",
+    "novel",
+    "electron",
+    "distraction-free"
+  ],
+  "author": "Tatai G. Wolfi",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "dependencies": {
+    "docx": "^8.0.0",
+    "file-saver": "^2.0.5",
+    "jspdf": "^2.5.1"
+  }
+}

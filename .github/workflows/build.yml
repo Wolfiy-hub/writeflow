@@ -1,0 +1,106 @@
+name: Build WriteFlow
+
+on:
+  push:
+    tags:
+      - 'v*'  # Only builds when you create a version tag like v1.0.0
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Windows
+        run: npm run build:win
+
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: WriteFlow-Windows
+          path: dist/*.exe
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Linux
+        run: npm run build:linux
+
+      - name: Upload Linux AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: WriteFlow-Linux
+          path: dist/*.AppImage
+
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build Mac
+        run: npm run build:mac
+
+      - name: Upload Mac DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: WriteFlow-Mac
+          path: dist/*.dmg
+
+  create-release:
+    needs: [build-windows, build-linux, build-mac]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/WriteFlow-Windows/*
+            artifacts/WriteFlow-Linux/*
+            artifacts/WriteFlow-Mac/*
+          body: |
+            ## WriteFlow ${{ github.ref_name }}
+            
+            ### Downloads
+            - **Windows**: WriteFlow Setup .exe
+            - **Linux**: WriteFlow .AppImage
+            - **Mac**: WriteFlow .dmg
+            
+            ### Installation
+            **Windows**: Run the installer. If SmartScreen warns you, click "More info" → "Run anyway".
+            **Linux**: Make the AppImage executable (`chmod +x WriteFlow*.AppImage`) then run it.
+            **Mac**: Open the .dmg and drag WriteFlow to Applications.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

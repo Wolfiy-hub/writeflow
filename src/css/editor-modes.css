@@ -1,0 +1,270 @@
+/* ============================================
+   EDITOR-MODES.CSS - Focus, Typewriter, Fullscreen
+   ============================================ */
+
+/* ==================== MODE TOGGLES IN TOOLBAR ==================== */
+
+.mode-btn {
+  position: relative;
+}
+
+.mode-btn.active {
+  background: rgba(124, 106, 247, 0.15);
+  color: var(--accent-primary);
+}
+
+.mode-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+}
+
+/* ==================== FONT SIZE CONTROL ==================== */
+
+.font-size-control {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.font-size-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-ui);
+  transition: var(--transition);
+}
+
+.font-size-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.font-size-value {
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 28px;
+  text-align: center;
+  font-family: var(--font-ui);
+}
+
+/* ==================== LINE WIDTH CONTROL ==================== */
+
+.line-width-control {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.line-width-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.line-width-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.line-width-btn.active {
+  background: rgba(124, 106, 247, 0.15);
+  color: var(--accent-primary);
+}
+
+/* ==================== FOCUS MODE ==================== */
+/* Dims all direct children of editor-content EXCEPT the focused one */
+
+body.focus-mode .editor-content>* {
+  transition: opacity 0.3s ease;
+  opacity: 0.25 !important;
+}
+
+body.focus-mode .editor-content>.focused-paragraph {
+  opacity: 1 !important;
+}
+
+/* ==================== TYPEWRITER MODE ==================== */
+/* Only add padding to writing area - title/summary stay put */
+
+body.typewriter-mode .editor-container {
+  scroll-behavior: smooth;
+}
+
+body.typewriter-mode .editor-content {
+  padding-top: 40vh;
+  padding-bottom: 50vh;
+}
+
+/* ==================== FULLSCREEN MODE ==================== */
+
+body.fullscreen-mode #top-bar,
+body.fullscreen-mode #sidebar {
+  display: none;
+}
+
+body.fullscreen-mode #main-content {
+  height: 100vh;
+}
+
+body.fullscreen-mode #view-container {
+  width: 100%;
+}
+
+body.fullscreen-mode #fullscreen-exit-btn {
+  display: flex !important;
+}
+
+#fullscreen-exit-btn {
+  display: none;
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: var(--transition);
+  opacity: 0.4;
+}
+
+#fullscreen-exit-btn:hover {
+  opacity: 1;
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* ==================== ZEN MODE ==================== */
+
+body.zen-mode #top-bar,
+body.zen-mode #sidebar,
+body.zen-mode .editor-toolbar,
+body.zen-mode .editor-footer,
+body.zen-mode .chapter-summary-section {
+  display: none;
+}
+
+body.zen-mode #main-content {
+  height: 100vh;
+}
+
+body.zen-mode #view-container {
+  width: 100%;
+}
+
+body.zen-mode .editor-container {
+  padding: 0 40px;
+  scroll-behavior: smooth;
+}
+
+body.zen-mode .editor-content {
+  padding-top: 40vh;
+  padding-bottom: 50vh;
+}
+
+body.zen-mode .editor-content>* {
+  transition: opacity 0.3s ease;
+  opacity: 0.25 !important;
+}
+
+body.zen-mode .editor-content>.focused-paragraph {
+  opacity: 1 !important;
+}
+
+body.zen-mode .chapter-title-input {
+  text-align: center;
+  padding-top: 40px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+body.zen-mode .chapter-title-input:focus,
+body.zen-mode .chapter-title-input:hover {
+  opacity: 1;
+}
+
+body.zen-mode #fullscreen-exit-btn {
+  display: flex !important;
+}
+
+.zen-mode-indicator {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 11px;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+body.zen-mode .zen-mode-indicator {
+  display: flex;
+}
+
+.zen-mode-indicator.visible {
+  opacity: 0.7;
+}
+
+/* ==================== LINE WIDTH VARIANTS ==================== */
+
+.editor-wrapper[data-width="narrow"] {
+  max-width: 560px;
+}
+
+.editor-wrapper[data-width="medium"] {
+  max-width: 780px;
+}
+
+.editor-wrapper[data-width="wide"] {
+  max-width: 1000px;
+}
+
+/* Force hide fullscreen exit button unless in fullscreen/zen mode */
+#fullscreen-exit-btn {
+  display: none !important;
+}
+
+body.fullscreen-mode #fullscreen-exit-btn,
+body.zen-mode #fullscreen-exit-btn {
+  display: flex !important;
+}
