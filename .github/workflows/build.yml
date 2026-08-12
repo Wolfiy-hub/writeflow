@@ -21,7 +21,9 @@ jobs:
         run: npm install
 
       - name: Build Windows
-        run: npm run build:win
+        run: npx electron-builder --win --publish never
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Windows installer
         uses: actions/upload-artifact@v4
@@ -44,7 +46,9 @@ jobs:
         run: npm install
 
       - name: Build Linux
-        run: npm run build:linux
+        run: npx electron-builder --linux --publish never
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Linux AppImage
         uses: actions/upload-artifact@v4
@@ -67,7 +71,9 @@ jobs:
         run: npm install
 
       - name: Build Mac
-        run: npm run build:mac
+        run: npx electron-builder --mac --publish never
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Mac DMG
         uses: actions/upload-artifact@v4
@@ -86,21 +92,21 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+        continue-on-error: true
 
       - name: List files
-        run: find artifacts -type f
+        run: find artifacts -type f || echo "No artifacts found"
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            artifacts/**/*
+          files: artifacts/**/*
           body: |
             ## WriteFlow ${{ github.ref_name }}
             
             ### Downloads
             - **Windows**: WriteFlow Setup .exe
-            - **Linux**: WriteFlow .AppImage  
+            - **Linux**: WriteFlow .AppImage
             - **Mac**: WriteFlow .dmg
             
             ### Installation
