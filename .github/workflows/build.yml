@@ -3,7 +3,7 @@ name: Build WriteFlow
 on:
   push:
     tags:
-      - 'v*'  # Only builds when you create a version tag like v1.0.0
+      - 'v*'
 
 jobs:
   build-windows:
@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install dependencies
         run: npm install
@@ -38,7 +38,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install dependencies
         run: npm install
@@ -61,7 +61,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Build Mac
         run: npm run build:mac
@@ -75,6 +78,7 @@ jobs:
   create-release:
     needs: [build-windows, build-linux, build-mac]
     runs-on: ubuntu-latest
+    if: always()
     permissions:
       contents: write
     steps:
@@ -83,24 +87,25 @@ jobs:
         with:
           path: artifacts
 
+      - name: List files
+        run: find artifacts -type f
+
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/WriteFlow-Windows/*
-            artifacts/WriteFlow-Linux/*
-            artifacts/WriteFlow-Mac/*
+            artifacts/**/*
           body: |
             ## WriteFlow ${{ github.ref_name }}
             
             ### Downloads
             - **Windows**: WriteFlow Setup .exe
-            - **Linux**: WriteFlow .AppImage
+            - **Linux**: WriteFlow .AppImage  
             - **Mac**: WriteFlow .dmg
             
             ### Installation
-            **Windows**: Run the installer. If SmartScreen warns you, click "More info" → "Run anyway".
-            **Linux**: Make the AppImage executable (`chmod +x WriteFlow*.AppImage`) then run it.
-            **Mac**: Open the .dmg and drag WriteFlow to Applications.
+            - **Windows**: Run installer. Click "More info" → "Run anyway" if SmartScreen warns.
+            - **Linux**: `chmod +x WriteFlow*.AppImage` then run it.
+            - **Mac**: Open .dmg, drag WriteFlow to Applications.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
